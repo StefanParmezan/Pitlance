@@ -1,9 +1,6 @@
-package com.example.JpaPractice.models;
+package com.example.JpaPractice.Models;
 
 import jakarta.persistence.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name="users")
@@ -13,11 +10,8 @@ public class User {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column
+    @Column(name = "username", unique = true)
     private String name;
-
-    @OneToMany(mappedBy = "user")
-    private List<Car> cars = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -26,8 +20,6 @@ public class User {
     public void setId(Long id) {
         this.id = id;
     }
-
-    public User(){}
 
     public String getName() {
         return name;
