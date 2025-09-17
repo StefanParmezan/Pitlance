@@ -3,32 +3,28 @@ package com.example.JpaPractice.Services;
 import com.example.JpaPractice.Models.User;
 import com.example.JpaPractice.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
-@Transactional
 public class UserService {
-    UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Autowired
     public UserService(UserRepository userRepository){
         this.userRepository = userRepository;
     }
 
-    public void save(User user){
-        userRepository.save(user);
+    public User save(User user){
+        return userRepository.save(user);
     }
 
     public User getByUserName(String username){
-        return userRepository.getUserByName(username);
+        return userRepository.getUserByUsername(username);
     }
 
-    public Page<User> getUsersToPage(int page, int size){
-        Pageable pageable = PageRequest.of(page, size);
-        return userRepository.findAll(pageable);
+    public List<User> findAll(){
+        return userRepository.findAll();
     }
 }
