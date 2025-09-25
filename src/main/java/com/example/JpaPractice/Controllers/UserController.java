@@ -1,17 +1,17 @@
 package com.example.JpaPractice.Controllers;
 
-import com.example.JpaPractice.Models.User;
+import com.example.JpaPractice.Models.User.User;
+import com.example.JpaPractice.Models.User.DTO.UserDto;
 import com.example.JpaPractice.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping
 public class UserController {
-
     private final UserService userService;
 
     @Autowired
@@ -19,20 +19,12 @@ public class UserController {
         this.userService = userService;
     }
 
-    @RequestMapping("/save")
-    public ResponseEntity<User> userSave(@RequestBody User user){
-        User savedUser = userService.save(user);
-        return ResponseEntity.ok(savedUser);
+    public UserService getUserService() {
+        return userService;
     }
 
-    @GetMapping("/list")
-    public List<User> userList(){
-        return userService.findAll();
-    }
-
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id){
-        userService.deleteById(id);
-        return ResponseEntity.noContent().build();
+    @RequestMapping("/registration")
+    public ResponseEntity<User> registration(@RequestBody UserDto userDto){
+        return ResponseEntity.ok(userService.save(userDto.getUsername(), userDto.getPassword()));
     }
 }

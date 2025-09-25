@@ -1,11 +1,10 @@
 package com.example.JpaPractice.Services;
 
-import com.example.JpaPractice.Models.User;
+import com.example.JpaPractice.Models.User.User;
 import com.example.JpaPractice.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserService {
@@ -16,19 +15,19 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public User save(User user){
-        return userRepository.save(user);
+    public UserRepository getUserRepository() {
+        return userRepository;
     }
 
-    public User getByUserName(String username){
-        return userRepository.getUserByUsername(username);
+    public User getUserById(Long id){
+        return userRepository.getUserById(id).orElseThrow();
     }
 
-    public List<User> findAll(){
-        return userRepository.findAll();
+    public User getUserByUsername(String username){
+        return userRepository.getUserByUsername(username).orElseThrow();
     }
 
-    public void deleteById(Long id){
-        userRepository.deleteById(id);
+    public User save(String username, String password){
+        return userRepository.save(new User(username, password));
     }
 }
