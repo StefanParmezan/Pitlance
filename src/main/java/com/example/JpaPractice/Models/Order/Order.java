@@ -1,7 +1,12 @@
 package com.example.JpaPractice.Models.Order;
 
 import com.example.JpaPractice.Models.Client.Client;
+import com.example.JpaPractice.Models.Item.Item;
 import jakarta.persistence.*;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="order")
@@ -15,6 +20,12 @@ public class Order {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "orders")
     private Client client;
+
+    @Column(name="created_at")
+    private LocalDateTime createdAt;
+
+    @OneToMany(mappedBy = "order")
+    List<Item> items = new ArrayList<>();
 
     //Constructors
 
@@ -34,5 +45,25 @@ public class Order {
 
     public void setClient(Client client) {
         this.client = client;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public List<Item> getItems() {
+        return items;
+    }
+
+    public void setItems(List<Item> items) {
+        this.items = items;
+    }
+
+    public void add(Item item){
+        this.items.add(item);
     }
 }
