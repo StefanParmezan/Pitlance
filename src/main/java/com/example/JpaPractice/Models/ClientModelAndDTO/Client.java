@@ -1,6 +1,6 @@
-package com.example.JpaPractice.Models.Client;
+package com.example.JpaPractice.Models.ClientModelAndDTO;
 
-import com.example.JpaPractice.Models.Order.Order;
+import com.example.JpaPractice.Models.OrderModelAndDTO.Order;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -59,6 +59,8 @@ public class Client {
         this.email = email;
     }
 
+
+
     public List<Order> getOrders() {
         return orders;
     }
@@ -69,5 +71,12 @@ public class Client {
 
     public void add(Order order){
         this.orders.add(order);
+    }
+
+    //Other methods
+
+    public void addOrder(Order order){
+        this.orders.add(order);
+        order.setClient(this);
     }
 }

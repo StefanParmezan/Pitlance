@@ -1,8 +1,8 @@
-package com.example.JpaPractice.Models.Order;
+package com.example.JpaPractice.Models.OrderModelAndDTO;
 
-import com.example.JpaPractice.Models.Client.Client;
-import com.example.JpaPractice.Models.Item.Item;
-import com.example.JpaPractice.Models.Status.Status;
+import com.example.JpaPractice.Models.ClientModelAndDTO.Client;
+import com.example.JpaPractice.Models.ItemModelAndDTO.Item;
+import com.example.JpaPractice.Models.StatusOrderAndDTO.Status;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name="order")
+@Table(name="orders")
 public class Order {
     //Variables
     @Id
@@ -79,4 +79,6 @@ public class Order {
     public void setStatus(Status status) {
         this.status = status;
     }
+
+    //Other methods
 }

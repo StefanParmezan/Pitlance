@@ -1,7 +1,6 @@
-package com.example.JpaPractice.Models.Item;
+package com.example.JpaPractice.Models.ItemModelAndDTO;
 
-import com.example.JpaPractice.Models.Order.Order;
-import com.example.JpaPractice.Models.Status.Status;
+import com.example.JpaPractice.Models.OrderModelAndDTO.Order;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -41,4 +40,6 @@ public class Item {
     public void setId(Long id) {
         this.id = id;
     }
+
+    //Other methods
 }
