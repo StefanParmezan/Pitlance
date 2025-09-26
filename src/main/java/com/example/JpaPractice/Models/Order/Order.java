@@ -2,6 +2,7 @@ package com.example.JpaPractice.Models.Order;
 
 import com.example.JpaPractice.Models.Client.Client;
 import com.example.JpaPractice.Models.Item.Item;
+import com.example.JpaPractice.Models.Status.Status;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -26,6 +27,10 @@ public class Order {
 
     @OneToMany(mappedBy = "order")
     List<Item> items = new ArrayList<>();
+
+    @Column(name="status")
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
     //Constructors
 
@@ -65,5 +70,13 @@ public class Order {
 
     public void add(Item item){
         this.items.add(item);
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 }

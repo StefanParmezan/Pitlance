@@ -1,7 +1,10 @@
 package com.example.JpaPractice.Models.Item;
 
 import com.example.JpaPractice.Models.Order.Order;
+import com.example.JpaPractice.Models.Status.Status;
 import jakarta.persistence.*;
+
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "items")
@@ -16,7 +19,18 @@ public class Item {
     @ManyToOne
     private Order order;
 
+    @Column(name = "item_name")
+    private String itemName;
+
+    @Column(name = "quantity")
+    private int quantity;
+
+    @Column(name = "price")
+    private BigDecimal price;
+
     //Constructor
+
+
 
     //Getters and Setters
 
