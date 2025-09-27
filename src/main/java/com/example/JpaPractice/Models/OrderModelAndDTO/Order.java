@@ -32,6 +32,9 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private Status status;
 
+    public Order() {
+    }
+
     //Constructors
 
 

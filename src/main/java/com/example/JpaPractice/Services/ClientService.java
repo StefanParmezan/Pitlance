@@ -27,9 +27,12 @@ public class ClientService {
         return clientRepository.getClientById(id).orElseThrow();
     }
 
+    public Client getClientByName(String name) {
+        return clientRepository.getClientByName(name).orElseThrow();
+    }
+
     public Client addOrder(Client client, Order order){
-        client.addOrder(order);
-        return client;
+        return client.addOrder(order);
     }
 
 
