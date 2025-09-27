@@ -33,6 +33,7 @@ public class ClientController {
         return ResponseEntity.ok(clientService.getClientById(id));
     }
 
+    //Recursion Client list with orders, next target: fix it
     @RequestMapping("/order")
     public ResponseEntity<Client> addOrder(@RequestBody ClientNameAndEmailDto clientNameAndEmailDto){
         return ResponseEntity.ok(clientService.getClientByName(clientNameAndEmailDto.name()).addOrder(orderService.save(new Order())));
