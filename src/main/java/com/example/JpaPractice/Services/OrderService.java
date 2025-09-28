@@ -1,5 +1,6 @@
 package com.example.JpaPractice.Services;
 
+import com.example.JpaPractice.Models.ClientModelAndDTO.Client;
 import com.example.JpaPractice.Models.OrderModelAndDTO.Order;
 import com.example.JpaPractice.Repositories.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,5 +17,9 @@ public class OrderService {
 
     public Order save(Order order){
         return orderRepository.save(order);
+    }
+
+    public Order getOrderByClient(Client client){
+        return orderRepository.getOrderByClient(client).orElseThrow();
     }
 }

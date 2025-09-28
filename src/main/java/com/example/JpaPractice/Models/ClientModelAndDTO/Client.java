@@ -75,9 +75,9 @@ public class Client {
 
     //Other methods
 
-    public Client addOrder(Order order){
-        this.orders.add(order);
-        order.setClient(this);
-        return this;
+    public Client addOrder(Client client, Order order){
+        client.orders.add(order);
+        order.setClient(client);
+        return client;
     }
 }

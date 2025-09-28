@@ -2,9 +2,12 @@ package com.example.JpaPractice.Services;
 
 import com.example.JpaPractice.Models.ClientModelAndDTO.Client;
 import com.example.JpaPractice.Models.OrderModelAndDTO.Order;
+import com.example.JpaPractice.Models.StatusOrderAndDTO.Status;
 import com.example.JpaPractice.Repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 @Service
 public class ClientService {
@@ -32,7 +35,9 @@ public class ClientService {
     }
 
     public Client addOrder(Client client, Order order){
-        return client.addOrder(order);
+        order.setCreatedAt(LocalDateTime.now());
+        order.setStatus(Status.NEW);
+        return client.addOrder(client, order);
     }
 
 
