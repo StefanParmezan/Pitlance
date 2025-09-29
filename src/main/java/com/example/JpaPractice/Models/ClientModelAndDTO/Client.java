@@ -75,9 +75,9 @@ public class Client {
 
     //Other methods
 
-    public Client addOrder(Client client, Order order){
+    public void addOrder(Client client, Order order){
         client.orders.add(order);
+        System.out.println(client.orders + "pppp");
         order.setClient(client);
-        return client;
     }
 }

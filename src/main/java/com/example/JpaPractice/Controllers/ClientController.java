@@ -4,16 +4,11 @@ import com.example.JpaPractice.Models.ClientModelAndDTO.Client;
 import com.example.JpaPractice.Models.ClientModelAndDTO.ClientNameEmailDto;
 import com.example.JpaPractice.Models.ClientModelAndDTO.ClientNameEmailOrdersDto;
 import com.example.JpaPractice.Models.OrderModelAndDTO.Order;
-import com.example.JpaPractice.Models.OrderModelAndDTO.OrderStatusCreatedAtId;
 import com.example.JpaPractice.Services.ClientService;
 import com.example.JpaPractice.Services.OrderService;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @RequestMapping("/client")
@@ -38,12 +33,8 @@ public class ClientController {
         return ResponseEntity.ok(clientService.getClientById(id));
     }
 
-    //Recursion Client list with orders, next target: fix it
     @RequestMapping("/order")
-    public ResponseEntity<ClientNameEmailOrdersDto> addOrder(@RequestBody ClientNameEmailDto clientNameEmailDto){
-        Order order = new Order();
-        Client client = clientService.addOrder(clientService.getClientByName(clientNameEmailDto.name()), order);
-        List<OrderStatusCreatedAtId> list = client.getOrders().stream().map(o -> new OrderStatusCreatedAtId(order.getId(), o.getStatus(), o.getCreatedAt())).toList();
-        return ResponseEntity.ok(new ClientNameEmailOrdersDto(client.getName(), client.getEmail(), list));
+    public ResponseEntity<ClientNameEmailOrdersDto> addOrder(@RequestParam Long id){
+        return ResponseEntity.ok(clientService.addOrder(clientService.getClientById(id), new Order()));
     }
 }

@@ -4,6 +4,6 @@ import com.example.JpaPractice.Models.StatusOrderAndDTO.Status;
 
 import java.time.LocalDateTime;
 
-public record OrderStatusCreatedAtId(Long id, Status status, LocalDateTime createdAt) {
+public record OrderUserIdStatusCreatedAtId(Long id, Long userId, Status status, LocalDateTime createdAt) {
 
 }
