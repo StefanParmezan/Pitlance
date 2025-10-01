@@ -4,9 +4,10 @@ import com.example.JpaPractice.Models.ClientModelAndDTO.Client;
 import com.example.JpaPractice.Models.ClientModelAndDTO.ClientNameEmailOrdersDto;
 import com.example.JpaPractice.Models.OrderModelAndDTO.Order;
 import com.example.JpaPractice.Models.OrderModelAndDTO.OrderUserIdStatusCreatedAtId;
-import com.example.JpaPractice.Models.StatusOrderAndDTO.Status;
+import com.example.JpaPractice.Models.StatusAndDTO.Status;
 import com.example.JpaPractice.Repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,17 +21,25 @@ public class ClientService {
 
     private final OrderService orderService;
 
+    private final PasswordEncoder passwordEncoder;
+
     //Constructor
     @Autowired
     public ClientService(ClientRepository clientRepository,
-                         OrderService orderService){
+                         OrderService orderService, PasswordEncoder passwordEncoder){
         this.clientRepository = clientRepository;
         this.orderService = orderService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     //Methods
 
-    public Client saveClient(Client client){
+    public Client saveClient(Client client) {
+        // Хешируем пароль перед сохранением
+        if (client.getPassword() != null && !client.getPassword().startsWith("$2a$")) {
+            String encodedPassword = passwordEncoder.encode(client.getPassword());
+            client.setPassword(encodedPassword);
+        }
         return clientRepository.save(client);
     }
 
@@ -54,4 +63,6 @@ public class ClientService {
         System.out.println(orderUserIdStatusCreatedAtIdList);
         return new ClientNameEmailOrdersDto(client.getId(), client.getName(), client.getEmail(), orderUserIdStatusCreatedAtIdList);
     }
+
+
 }

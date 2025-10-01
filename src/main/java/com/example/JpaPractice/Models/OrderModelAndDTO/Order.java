@@ -2,7 +2,7 @@ package com.example.JpaPractice.Models.OrderModelAndDTO;
 
 import com.example.JpaPractice.Models.ClientModelAndDTO.Client;
 import com.example.JpaPractice.Models.ItemModelAndDTO.Item;
-import com.example.JpaPractice.Models.StatusOrderAndDTO.Status;
+import com.example.JpaPractice.Models.StatusAndDTO.Status;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;

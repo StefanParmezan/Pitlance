@@ -1,6 +1,6 @@
 package com.example.JpaPractice.Models.OrderModelAndDTO;
 
-import com.example.JpaPractice.Models.StatusOrderAndDTO.Status;
+import com.example.JpaPractice.Models.StatusAndDTO.Status;
 
 import java.time.LocalDateTime;
 

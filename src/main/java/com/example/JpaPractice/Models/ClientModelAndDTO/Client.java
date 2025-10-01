@@ -18,6 +18,9 @@ public class Client {
     @Column(name="name")
     private String name;
 
+    @Column(name = "password")
+    private String password;
+
     @Column(name="email", unique = true)
     private String email;
 
@@ -27,9 +30,10 @@ public class Client {
     //Constructors
     public Client(){}
 
-    public Client(String name, String email){
+    public Client(String name, String email, String password){
         this.name = name;
         this.email = email;
+        this.password = password;
     }
 
 
@@ -59,7 +63,13 @@ public class Client {
         this.email = email;
     }
 
+    public String getPassword() {
+        return password;
+    }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     public List<Order> getOrders() {
         return orders;
@@ -77,7 +87,6 @@ public class Client {
 
     public void addOrder(Client client, Order order){
         client.orders.add(order);
-        System.out.println(client.orders + "pppp");
         order.setClient(client);
     }
 }

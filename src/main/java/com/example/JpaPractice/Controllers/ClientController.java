@@ -1,7 +1,7 @@
 package com.example.JpaPractice.Controllers;
 
 import com.example.JpaPractice.Models.ClientModelAndDTO.Client;
-import com.example.JpaPractice.Models.ClientModelAndDTO.ClientNameEmailDto;
+import com.example.JpaPractice.Models.ClientModelAndDTO.ClientNameEmailPasswordDto;
 import com.example.JpaPractice.Models.ClientModelAndDTO.ClientNameEmailOrdersDto;
 import com.example.JpaPractice.Models.OrderModelAndDTO.Order;
 import com.example.JpaPractice.Services.ClientService;
@@ -24,8 +24,8 @@ public class ClientController {
     }
 
     @RequestMapping
-    public ResponseEntity<Client> save(@RequestBody ClientNameEmailDto client){
-        return ResponseEntity.ok(clientService.saveClient(new Client(client.name(), client.email())));
+    public ResponseEntity<Client> save(@RequestBody ClientNameEmailPasswordDto client){
+        return ResponseEntity.ok(clientService.saveClient(new Client(client.name(), client.email(), client.password())));
     }
 
     @GetMapping("{id}")
