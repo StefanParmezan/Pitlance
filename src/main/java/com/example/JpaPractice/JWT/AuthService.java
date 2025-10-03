@@ -1,4 +1,4 @@
-package com.example.JpaPractice.Services;
+package com.example.JpaPractice.JWT;
 
 import com.example.JpaPractice.Models.Auth.AuthLoginResponse;
 import com.example.JpaPractice.Models.ClientModelAndDTO.Client;
@@ -33,8 +33,10 @@ public class AuthService {
             return new AuthLoginResponse(null, "Invalid password", false);
         }
 
-        String token = jwtService.generateToken(username);
+        String token = jwtService.generateToken(username, "USER");
 
         return new AuthLoginResponse(token, "Login successful", true);
     }
+
+
 }

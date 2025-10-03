@@ -2,7 +2,7 @@ package com.example.JpaPractice.Controllers;
 
 import com.example.JpaPractice.Models.Auth.AuthLoginRequest;
 import com.example.JpaPractice.Models.Auth.AuthLoginResponse;
-import com.example.JpaPractice.Services.AuthService;
+import com.example.JpaPractice.JWT.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

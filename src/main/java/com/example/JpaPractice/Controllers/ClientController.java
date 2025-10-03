@@ -33,8 +33,8 @@ public class ClientController {
         return ResponseEntity.ok(clientService.getClientById(id));
     }
 
-    @RequestMapping("/order")
-    public ResponseEntity<ClientNameEmailOrdersDto> addOrder(@RequestParam Long id){
+    @RequestMapping("/orders{id}")
+    public ResponseEntity<ClientNameEmailOrdersDto> addOrder(@PathVariable Long id){
         return ResponseEntity.ok(clientService.addOrder(clientService.getClientById(id), new Order()));
     }
 }
