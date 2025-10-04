@@ -1,30 +1,32 @@
 package com.example.JpaPractice.Controllers;
-
-import com.example.JpaPractice.Models.Auth.AuthLoginRequest;
-import com.example.JpaPractice.Models.Auth.AuthLoginResponse;
-import com.example.JpaPractice.JWT.AuthService;
+import com.example.JpaPractice.JWT.JwtService;
+import com.example.JpaPractice.Models.Auth.AuthResponse;
+import com.example.JpaPractice.Models.Auth.LoginRequest;
+import com.example.JpaPractice.Services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/auth")
 public class AuthController {
 
     @Autowired
     private AuthService authService;
 
-    @PostMapping("/login")
-    public ResponseEntity<AuthLoginResponse> login(@RequestBody AuthLoginRequest authLoginRequest) {
-        AuthLoginResponse response = authService.authenticate(
-                authLoginRequest.getUsername(),
-                authLoginRequest.getPassword()
-        );
+    @Autowired
+    private JwtService jwtService;
 
-        if (response.isSuccess()) {
-            return ResponseEntity.ok(response);
-        } else {
-            return ResponseEntity.status(401).body(response);
+    @PostMapping("/auth")
+    public ResponseEntity<?> authenticate(@RequestBody LoginRequest loginRequest) {
+        String username = loginRequest.username();
+        String password = loginRequest.password();
+
+        if (!authService.authenticate(username, password)) {
+            return ResponseEntity.status(401).body("Неверный логин или пароль");
         }
+
+        String token = jwtService.generateToken(username);
+        AuthResponse response = new AuthResponse(token, username);
+        return ResponseEntity.ok(response);
     }
 }

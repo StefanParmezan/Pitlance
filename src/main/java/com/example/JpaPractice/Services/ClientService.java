@@ -35,11 +35,8 @@ public class ClientService {
     //Methods
 
     public Client saveClient(Client client) {
-        // Хешируем пароль перед сохранением
-        if (client.getPassword() != null && !client.getPassword().startsWith("$2a$")) {
-            String encodedPassword = passwordEncoder.encode(client.getPassword());
-            client.setPassword(encodedPassword);
-        }
+        String hashedPassword = passwordEncoder.encode(client.getPassword());
+        client.setPassword(hashedPassword);
         return clientRepository.save(client);
     }
 
