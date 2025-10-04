@@ -48,18 +48,14 @@ public class ClientService {
         return clientRepository.getClientByName(name).orElseThrow();
     }
 
-    @Transactional
-    public ClientNameEmailOrdersDto addOrder(Client client, Order order){
-        order.setCreatedAt(LocalDateTime.now());
-        order.setStatus(Status.NEW);
-        client.addOrder(client, order);
-        orderService.save(order);
-        System.out.println(client.getOrders());
-        List<Order> orders = client.getOrders();
-        List<OrderUserIdStatusCreatedAtId> orderUserIdStatusCreatedAtIdList = orders.stream().map(o -> new OrderUserIdStatusCreatedAtId(o.getId(), o.getClient().getId(), o.getStatus(), o.getCreatedAt())).toList();
-        System.out.println(orderUserIdStatusCreatedAtIdList);
-        return new ClientNameEmailOrdersDto(client.getId(), client.getName(), client.getEmail(), orderUserIdStatusCreatedAtIdList);
-    }
+        @Transactional
+        public ClientNameEmailOrdersDto addOrder(Long id){
+            Order order = new Order(LocalDateTime.now(), Status.NEW);
+            Client client = getClientById(id);
+            client.addOrder(client, order);
+            orderService.save(order);
+            return ClientNameEmailOrdersDto.of(client);
+        }
 
 
 }

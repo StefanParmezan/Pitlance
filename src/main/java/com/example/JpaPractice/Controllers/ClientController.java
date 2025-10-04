@@ -28,13 +28,13 @@ public class ClientController {
         return ResponseEntity.ok(clientService.saveClient(new Client(client.name(), client.email(), client.password())));
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Client> getClientById(@PathVariable Long id){
         return ResponseEntity.ok(clientService.getClientById(id));
     }
 
-    @RequestMapping("/orders/{id}")
-    public ResponseEntity<ClientNameEmailOrdersDto> addOrder(@PathVariable Long id){
-        return ResponseEntity.ok(clientService.addOrder(clientService.getClientById(id), new Order()));
+    @RequestMapping("/orders/{clientId}")
+    public ResponseEntity<ClientNameEmailOrdersDto> addOrder(@PathVariable Long clientId){
+        return ResponseEntity.ok(clientService.addOrder(clientId));
     }
 }

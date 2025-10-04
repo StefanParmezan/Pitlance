@@ -5,5 +5,7 @@ import com.example.JpaPractice.Models.StatusAndDTO.Status;
 import java.time.LocalDateTime;
 
 public record OrderUserIdStatusCreatedAtId(Long id, Long userId, Status status, LocalDateTime createdAt) {
-
+    public static OrderUserIdStatusCreatedAtId of(Order order){
+        return new OrderUserIdStatusCreatedAtId(order.getId(), order.getClient().getId(), order.getStatus(), order.getCreatedAt());
+    }
 }

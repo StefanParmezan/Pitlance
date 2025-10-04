@@ -33,6 +33,12 @@ public class Order {
     private Status status;
 
     public Order() {
+
+    }
+
+    public Order(LocalDateTime createdAt, Status status){
+        this.createdAt = createdAt;
+        this.status = status;
     }
 
     //Constructors
