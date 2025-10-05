@@ -36,7 +36,7 @@
 
 <div class="nav">
   <a href="http://localhost:8080/register">Нет аккаунта? Зарегистрироваться</a> |
-  <a href="orders.html">Перейти к заказам</a>
+  <a href="http://localhost:8080/orders">Перейти к заказам</a>
 </div>
 
 <script>
@@ -85,7 +85,7 @@
 
   // Проверяем, есть ли уже токен
   if (localStorage.getItem('jwtToken')) {
-      document.getElementById('message').innerHTML = `<div class="success">Вы уже авторизованы как ${localStorage.getItem('username')}. <a href="orders.html">Перейти к заказам</a></div>`;
+      document.getElementById('message').innerHTML = `<div class="success">Вы уже авторизованы как ${localStorage.getItem('username')}. <a href="http://localhost:8080/orders">Перейти к заказам</a></div>`;
   }
 </script>
 </body>
