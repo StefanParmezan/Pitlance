@@ -44,6 +44,10 @@ public class ClientService {
         return clientRepository.getClientById(id).orElseThrow();
     }
 
+    public ClientNameEmailOrdersDto getClientNameEmailOrdersDtoById(Long id){
+        return ClientNameEmailOrdersDto.of(getClientById(id));
+    }
+
     public Client getClientByName(String name) {
         return clientRepository.getClientByName(name).orElseThrow();
     }
