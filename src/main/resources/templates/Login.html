@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE h#<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -15,6 +15,7 @@
         .success { background: #d4edda; color: #155724; }
         .error { background: #f8d7da; color: #721c24; }
         .nav { text-align: center; margin-top: 20px; }
+        .token-display { word-break: break-all; font-size: 12px; margin-top: 10px; }
     </style>
 </head>
 <body>
@@ -34,14 +35,107 @@
 <div id="message"></div>
 
 <div class="nav">
-    <a href="/register">Нет аккаунта? Зарегистрироваться</a>
+    <a href="http://localhost:8080/register">Нет аккаунта? Зарегистрироваться</a> |
+    <a href="#" id="privateLink">Перейти к заказам</a>
 </div>
 
 <script>
-    // Функция для установки cookie
+    // Функции для работы с cookies
     function setCookie(name, value, days = 7) {
-      const expires = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toUTCString();
-      document.cookie = `${name}=${value}; expires=${expires}; path=/`;
+        const expires = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toUTCString();
+        document.cookie = `${name}=${value}; expires=${expires}; path=/`;
+    }
+
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+        return null;
+    }
+
+    function deleteCookie(name) {
+        document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
+    }
+
+    // Функция для перехода на защищенную страницу через форму
+    function navigateToPrivateWithForm() {
+        const token = getCookie('jwtToken');
+        if (token) {
+            // Создаем временную форму для отправки токена
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = 'http://localhost:8080/private';
+
+            // Добавляем токен как скрытое поле
+            const tokenInput = document.createElement('input');
+            tokenInput.type = 'hidden';
+            tokenInput.name = 'token';
+            tokenInput.value = token;
+            form.appendChild(tokenInput);
+
+            // Добавляем форму в документ и отправляем
+            document.body.appendChild(form);
+            form.submit();
+        } else {
+            document.getElementById('message').innerHTML =
+                '<div class="error">Токен не найден. Пожалуйста, войдите в систему.</div>';
+        }
+    }
+
+    // Альтернативный метод - через URL параметр
+    function navigateToPrivateWithURL() {
+        const token = getCookie('jwtToken');
+        if (token) {
+            // Перенаправляем с токеном в URL
+            window.location.href = `http://localhost:8080/private?token=${encodeURIComponent(token)}`;
+        } else {
+            document.getElementById('message').innerHTML =
+                '<div class="error">Токен не найден. Пожалуйста, войдите в системе.</div>';
+        }
+    }
+
+    // Основной метод - через заголовок (для API запросов)
+    function navigateToPrivate() {
+        const token = getCookie('jwtToken');
+        if (!token) {
+            document.getElementById('message').innerHTML =
+                '<div class="error">Токен не найден. Пожалуйста, войдите в систему.</div>';
+            return;
+        }
+
+        // Пробуем загрузить через fetch и заменить контент
+        fetch('http://localhost:8080/private', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.text();
+            } else if (response.status === 401) {
+                throw new Error('Не авторизован');
+            } else {
+                throw new Error('Ошибка загрузки страницы');
+            }
+        })
+        .then(html => {
+            // Полностью заменяем документ
+            document.documentElement.innerHTML = html;
+
+            // Обновляем URL в адресной строке
+            window.history.pushState({}, '', '/private');
+        })
+        .catch(error => {
+            document.getElementById('message').innerHTML =
+                `<div class="error">${error.message}. Попробуем другой метод...</div>`;
+
+            // Если fetch не сработал, пробуем метод с формой
+            setTimeout(() => {
+                navigateToPrivateWithForm();
+            }, 1000);
+        });
     }
 
     document.getElementById('loginForm').addEventListener('submit', async function(e) {
@@ -67,14 +161,12 @@
                 const authData = await response.json();
                 messageDiv.innerHTML = `<div class="success">Авторизация успешна! Добро пожаловать, ${authData.username}</div>`;
 
-                // Сохраняем токен в cookies вместо localStorage
+                // Сохраняем токен в cookies
                 setCookie('jwtToken', authData.token);
                 setCookie('username', authData.username);
 
-                // Перенаправляем на защищенную страницу
-                setTimeout(() => {
-                    window.location.href = '/private';
-                }, 1000);
+                // НЕМЕДЛЕННО переходим на защищенную страницу
+                navigateToPrivate();
             } else {
                 const error = await response.text();
                 messageDiv.innerHTML = `<div class="error">Ошибка авторизации: ${error}</div>`;
@@ -84,18 +176,60 @@
         }
     });
 
+    // Обработчик для ссылки "Перейти к заказам"
+    document.getElementById('privateLink').addEventListener('click', function(e) {
+        e.preventDefault();
+        navigateToPrivate();
+    });
+
     // Проверяем, есть ли уже токен в cookies
-    function getCookie(name) {
-      const value = `; ${document.cookie}`;
-      const parts = value.split(`; ${name}=`);
-      if (parts.length === 2) return parts.pop().split(';').shift();
+    if (getCookie('jwtToken')) {
+        const username = getCookie('username');
+        document.getElementById('message').innerHTML =
+            `<div class="success">Вы уже авторизованы как ${username}.
+             <a href="#" id="goToPrivate">Перейти к заказам</a></div>`;
+
+        document.getElementById('goToPrivate').addEventListener('click', function(e) {
+            e.preventDefault();
+            navigateToPrivate();
+        });
     }
 
-    if (getCookie('jwtToken')) {
-        document.getElementById('message').innerHTML =
-            `<div class="success">Вы уже авторизованы как ${getCookie('username')}.
-             <a href="/private">Перейти к заказам</a></div>`;
-    }
+    // Функция для выполнения авторизованных запросов с токеном из cookies
+    window.makeAuthenticatedRequest = function(url, options = {}) {
+        const token = getCookie('jwtToken');
+        if (!token) {
+            window.location.href = '/login';
+            return Promise.reject('No token');
+        }
+
+        const defaultOptions = {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        };
+
+        const mergedOptions = {
+            ...defaultOptions,
+            ...options,
+            headers: {
+                ...defaultOptions.headers,
+                ...options.headers
+            }
+        };
+
+        return fetch(url, mergedOptions)
+            .then(response => {
+                if (response.status === 401) {
+                    deleteCookie('jwtToken');
+                    deleteCookie('username');
+                    window.location.href = '/login';
+                    throw new Error('Unauthorized');
+                }
+                return response;
+            });
+    };
 </script>
 </body>
 </html>
