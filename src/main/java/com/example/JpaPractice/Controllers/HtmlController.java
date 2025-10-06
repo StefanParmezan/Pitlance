@@ -14,4 +14,9 @@ public class HtmlController {
     public String login(){
         return "Login";
     }
+
+    @GetMapping("/private")
+    public String privatepage(){
+        return "Private";
+    }
 }
