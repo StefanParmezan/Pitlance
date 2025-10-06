@@ -15,7 +15,6 @@
         .success { background: #d4edda; color: #155724; }
         .error { background: #f8d7da; color: #721c24; }
         .nav { text-align: center; margin-top: 20px; }
-        .token-display { word-break: break-all; font-size: 12px; margin-top: 10px; }
     </style>
 </head>
 <body>
@@ -35,46 +34,14 @@
 <div id="message"></div>
 
 <div class="nav">
-    <a href="http://localhost:8080/register">Нет аккаунта? Зарегистрироваться</a> |
-    <a href="#" id="privateLink">Перейти к заказам</a>
+    <a href="/register">Нет аккаунта? Зарегистрироваться</a>
 </div>
 
 <script>
-    // Функция для перехода на защищенную страницу с токеном
-    function navigateToPrivate() {
-      const token = localStorage.getItem('jwtToken');
-      if (token) {
-        // Используем fetch для загрузки защищенной страницы с токеном
-        fetch('http://localhost:8080/private', {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        })
-        .then(response => {
-          if (response.ok) {
-            return response.text();
-          } else if (response.status === 401) {
-            throw new Error('Не авторизован');
-          } else {
-            throw new Error('Ошибка загрузки страницы');
-          }
-        })
-        .then(html => {
-          // Заменяем текущую страницу на полученный HTML
-          document.open();
-          document.write(html);
-          document.close();
-        })
-        .catch(error => {
-          document.getElementById('message').innerHTML =
-            `<div class="error">${error.message}. <a href="/login">Войдите снова</a></div>`;
-          localStorage.removeItem('jwtToken');
-          localStorage.removeItem('username');
-        });
-      } else {
-        document.getElementById('message').innerHTML =
-          '<div class="error">Токен не найден. Пожалуйста, войдите в систему.</div>';
-      }
+    // Функция для установки cookie
+    function setCookie(name, value, days = 7) {
+      const expires = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toUTCString();
+      document.cookie = `${name}=${value}; expires=${expires}; path=/`;
     }
 
     document.getElementById('loginForm').addEventListener('submit', async function(e) {
@@ -100,17 +67,14 @@
                 const authData = await response.json();
                 messageDiv.innerHTML = `<div class="success">Авторизация успешна! Добро пожаловать, ${authData.username}</div>`;
 
-                // Сохраняем токен в localStorage
-                localStorage.setItem('jwtToken', authData.token);
-                localStorage.setItem('username', authData.username);
+                // Сохраняем токен в cookies вместо localStorage
+                setCookie('jwtToken', authData.token);
+                setCookie('username', authData.username);
 
-                // Показываем токен (для отладки)
-                messageDiv.innerHTML += `<div class="token-display">Токен: ${authData.token}</div>`;
-
-                // Перенаправляем на страницу заказов через 2 секунды
+                // Перенаправляем на защищенную страницу
                 setTimeout(() => {
-                    navigateToPrivate();
-                }, 2000);
+                    window.location.href = '/private';
+                }, 1000);
             } else {
                 const error = await response.text();
                 messageDiv.innerHTML = `<div class="error">Ошибка авторизации: ${error}</div>`;
@@ -120,59 +84,18 @@
         }
     });
 
-    // Обработчик для ссылки "Перейти к заказам"
-    document.getElementById('privateLink').addEventListener('click', function(e) {
-        e.preventDefault();
-        navigateToPrivate();
-    });
-
-    // Проверяем, есть ли уже токен
-    if (localStorage.getItem('jwtToken')) {
-        document.getElementById('message').innerHTML =
-            `<div class="success">Вы уже авторизованы как ${localStorage.getItem('username')}.
-             <a href="#" id="goToPrivate">Перейти к заказам</a></div>`;
-
-        document.getElementById('goToPrivate').addEventListener('click', function(e) {
-            e.preventDefault();
-            navigateToPrivate();
-        });
+    // Проверяем, есть ли уже токен в cookies
+    function getCookie(name) {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
     }
 
-    // Функция для выполнения авторизованных запросов
-    window.makeAuthenticatedRequest = function(url, options = {}) {
-        const token = localStorage.getItem('jwtToken');
-        if (!token) {
-            window.location.href = '/login';
-            return Promise.reject('No token');
-        }
-
-        const defaultOptions = {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            }
-        };
-
-        const mergedOptions = {
-            ...defaultOptions,
-            ...options,
-            headers: {
-                ...defaultOptions.headers,
-                ...options.headers
-            }
-        };
-
-        return fetch(url, mergedOptions)
-            .then(response => {
-                if (response.status === 401) {
-                    localStorage.removeItem('jwtToken');
-                    localStorage.removeItem('username');
-                    window.location.href = '/login';
-                    throw new Error('Unauthorized');
-                }
-                return response;
-            });
-    };
+    if (getCookie('jwtToken')) {
+        document.getElementById('message').innerHTML =
+            `<div class="success">Вы уже авторизованы как ${getCookie('username')}.
+             <a href="/private">Перейти к заказам</a></div>`;
+    }
 </script>
 </body>
 </html>

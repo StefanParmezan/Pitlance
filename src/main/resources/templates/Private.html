@@ -2,9 +2,94 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Title</title>
+  <title>Приватная страница</title>
+  <script>
+    // Функция для получения cookie по имени
+    function getCookie(name) {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
+    }
+
+    // Функция для выполнения авторизованных запросов
+    async function makeAuthenticatedRequest(url, options = {}) {
+      const token = getCookie('jwtToken');
+
+      if (!token) {
+        window.location.href = '/login';
+        return null;
+      }
+
+      const defaultOptions = {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      };
+
+      const mergedOptions = {
+        ...defaultOptions,
+        ...options,
+        headers: {
+          ...defaultOptions.headers,
+          ...options.headers
+        }
+      };
+
+      try {
+        const response = await fetch(url, mergedOptions);
+
+        if (response.status === 401) {
+          // Если токен невалиден, удаляем cookie и перенаправляем на логин
+          document.cookie = 'jwtToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+          window.location.href = '/login';
+          return null;
+        }
+
+        return response;
+      } catch (error) {
+        console.error('Ошибка запроса:', error);
+        return null;
+      }
+    }
+
+    // Функция для загрузки защищенных данных
+    async function loadProtectedData() {
+      const response = await makeAuthenticatedRequest('/api/protected-data');
+      if (response && response.ok) {
+        const data = await response.json();
+        const contentDiv = document.getElementById('protectedContent');
+        if (contentDiv) {
+          contentDiv.innerHTML = `<p>Защищенные данные: ${JSON.stringify(data)}</p>`;
+        }
+      }
+    }
+
+    // Функция для выхода
+    function logout() {
+      document.cookie = 'jwtToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+      document.cookie = 'username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+      window.location.href = '/login';
+    }
+
+    // Проверка аутентификации при загрузке страницы
+    document.addEventListener('DOMContentLoaded', function() {
+      const token = getCookie('jwtToken');
+      if (!token) {
+        window.location.href = '/login';
+        return;
+      }
+
+      // Загружаем защищенные данные
+      loadProtectedData();
+    });
+  </script>
 </head>
 <body>
-  <h6>Приватная страница</h6>
+<h1>Приватная страница</h1>
+<button onclick="logout()">Выйти</button>
+<div id="protectedContent">
+  <p>Загрузка защищенных данных...</p>
+</div>
 </body>
 </html>
