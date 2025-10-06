@@ -16,6 +16,7 @@ public class AuthController {
     @Autowired
     private JwtService jwtService;
 
+    //g
     @PostMapping("/auth")
     public ResponseEntity<?> authenticate(@RequestBody LoginRequest loginRequest) {
         String username = loginRequest.username();
