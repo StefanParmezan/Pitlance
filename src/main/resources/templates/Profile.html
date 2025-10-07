@@ -4,20 +4,25 @@
   <meta charset="UTF-8">
   <title>Приватная страница</title>
   <script>
-    // Функция для получения cookie по имени
+    // --- Вспомогательные функции для cookies ---
     function getCookie(name) {
       const value = `; ${document.cookie}`;
       const parts = value.split(`; ${name}=`);
       if (parts.length === 2) return parts.pop().split(';').shift();
+      return null;
     }
 
-    // Функция для выполнения авторизованных запросов
+    function deleteCookie(name) {
+      document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+    }
+
+    // --- Универсальная функция для авторизованных запросов ---
     async function makeAuthenticatedRequest(url, options = {}) {
       const token = getCookie('jwtToken');
 
       if (!token) {
         window.location.href = '/login';
-        return null;
+        return Promise.reject('No token');
       }
 
       const defaultOptions = {
@@ -39,40 +44,41 @@
       try {
         const response = await fetch(url, mergedOptions);
 
-        if (response.status === 401) {
-          // Если токен невалиден, удаляем cookie и перенаправляем на логин
-          document.cookie = 'jwtToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        if (response.status === 401 || response.status === 403) {
+          // Токен недействителен — очищаем и редиректим
+          deleteCookie('jwtToken');
+          deleteCookie('username');
           window.location.href = '/login';
-          return null;
+          return Promise.reject('Unauthorized');
         }
 
         return response;
       } catch (error) {
         console.error('Ошибка запроса:', error);
-        return null;
+        return Promise.reject(error);
       }
     }
 
-    // Функция для загрузки защищенных данных
+    // --- Загрузка защищённых данных ---
     async function loadProtectedData() {
-      const response = await makeAuthenticatedRequest('/api/protected-data');
-      if (response && response.ok) {
+      try {
+        const response = await makeAuthenticatedRequest('/api/protected-data');
         const data = await response.json();
-        const contentDiv = document.getElementById('protectedContent');
-        if (contentDiv) {
-          contentDiv.innerHTML = `<p>Защищенные данные: ${JSON.stringify(data)}</p>`;
-        }
+        document.getElementById('protectedContent').innerHTML =
+          `<p>Данные загружены: ${JSON.stringify(data)}</p>`;
+      } catch (error) {
+        // Ошибка уже обработана в makeAuthenticatedRequest
       }
     }
 
-    // Функция для выхода
+    // --- Выход из системы ---
     function logout() {
-      document.cookie = 'jwtToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-      document.cookie = 'username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+      deleteCookie('jwtToken');
+      deleteCookie('username');
       window.location.href = '/login';
     }
 
-    // Проверка аутентификации при загрузке страницы
+    // --- Проверка при загрузке страницы ---
     document.addEventListener('DOMContentLoaded', function() {
       const token = getCookie('jwtToken');
       if (!token) {
@@ -80,7 +86,7 @@
         return;
       }
 
-      // Загружаем защищенные данные
+      // Загружаем данные
       loadProtectedData();
     });
   </script>
@@ -89,7 +95,7 @@
 <h1>Приватная страница</h1>
 <button onclick="logout()">Выйти</button>
 <div id="protectedContent">
-  <p>Загрузка защищенных данных...</p>
+  <p>Загрузка защищённых данных...</p>
 </div>
 </body>
 </html>

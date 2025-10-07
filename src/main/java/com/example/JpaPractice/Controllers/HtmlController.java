@@ -15,8 +15,8 @@ public class HtmlController {
         return "Login";
     }
 
-    @GetMapping("/private")
-    public String privatepage(){
-        return "Private";
+    @GetMapping("/profile")
+    public String profile(){
+        return "Profile";
     }
 }
