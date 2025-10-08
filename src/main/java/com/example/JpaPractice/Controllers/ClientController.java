@@ -28,9 +28,9 @@ public class ClientController {
         return ResponseEntity.ok(clientService.saveClient(client));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ClientNameEmailOrdersDto> getClientNameEmailOrdersDtoById(@PathVariable Long id){
-        return ResponseEntity.ok(clientService.getClientNameEmailOrdersDtoById(id));
+    @GetMapping("/{clientId}")
+    public ResponseEntity<ClientNameEmailOrdersDto> getClientNameEmailOrdersDtoById(@PathVariable Long clientId){
+        return ResponseEntity.ok(clientService.getClientNameEmailOrdersDtoById(clientId));
     }
 
     @RequestMapping("/orders/{clientId}")
