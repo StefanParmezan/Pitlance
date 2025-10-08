@@ -41,24 +41,6 @@
 </div>
 
 <script>
-    // --- Надёжная работа с cookies (без decodeURIComponent) ---
-    function setCookie(name, value, days = 7) {
-        const expires = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toUTCString();
-        document.cookie = `${name}=${value}; expires=${expires}; path=/; SameSite=Lax`;
-    }
-
-    function getCookie(name) {
-        return document.cookie
-            .split('; ')
-            .find(row => row.startsWith(name + '='))
-            ?.split('=')[1] || null;
-    }
-
-    function deleteCookie(name) {
-        document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; SameSite=Lax`;
-    }
-
-    // --- Обработка входа ---
     document.getElementById('loginForm').addEventListener('submit', async function(e) {
         e.preventDefault();
         const messageDiv = document.getElementById('message');
@@ -74,53 +56,29 @@
                 body: JSON.stringify({ username, password })
             });
 
-            let data;
-            try {
-                data = await response.json();
-            } catch (e) {
-                const text = await response.text();
-                console.error('Сервер вернул не JSON:', text);
-                messageDiv.innerHTML = `<div class="error">Ошибка: недопустимый формат ответа</div>`;
-                return;
-            }
-
             if (response.ok) {
-                if (!data.token || !data.id) {
-                    console.error('Ответ не содержит token или id:', data);
-                    messageDiv.innerHTML = `<div class="error">Ошибка: не хватает данных сессии</div>`;
-                    return;
-                }
+                const data = await response.json();
+                console.log('✅ Вход успешен:', data);
 
-                // Сохраняем ВСЁ без кодирования
-                setCookie('jwtToken', data.token);
-                setCookie('username', data.username || username);
-                setCookie('userId', data.id);
+                // Сохраняем в localStorage
 
-                // Отладка
-                console.log('✅ Сессия сохранена:');
-                console.log('jwtToken:', getCookie('jwtToken'));
-                console.log('userId:', getCookie('userId'));
+                localStorage.setItem('jwtToken', data.token);
+                localStorage.setItem('userId', data.id);
+                localStorage.setItem('username', data.username);
 
-                messageDiv.innerHTML = `<div class="success">Авторизация успешна! Добро пожаловать, ${data.username || username}</div>`;
+                console.log('🔐 Токен и ID сохранены в localStorage');
 
-                setTimeout(() => {
-                    window.location.href = '/profile';
-                }, 1000);
+                // Переход на профиль
+                window.location.href = '/profile';
             } else {
-                const msg = data.message || data.error || 'Неверные данные';
-                messageDiv.innerHTML = `<div class="error">Ошибка: ${msg}</div>`;
+                const error = await response.text();
+                messageDiv.innerHTML = `<div class="error">Ошибка: ${error || 'Неверные данные'}</div>`;
             }
-        } catch (err) {
-            console.error('Сетевая ошибка:', err);
-            messageDiv.innerHTML = `<div class="error">Ошибка подключения: ${err.message}</div>`;
+        } catch (error) {
+            console.error('❌ Ошибка сети:', error);
+            messageDiv.innerHTML = `<div class="error">Ошибка подключения</div>`;
         }
     });
-
-    // --- Проверка существующей сессии ---
-    if (getCookie('jwtToken') && getCookie('username')) {
-        document.getElementById('message').innerHTML =
-            `<div class="success">Вы уже вошли как ${getCookie('username')}.</div>`;
-    }
 </script>
 </body>
 </html>
