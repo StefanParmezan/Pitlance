@@ -24,12 +24,12 @@ public class ClientController {
     }
 
     @RequestMapping
-    public ResponseEntity<Client> save(@RequestBody ClientNameEmailPasswordDto client){
-        return ResponseEntity.ok(clientService.saveClient(new Client(client.name(), client.email(), client.password())));
+    public ResponseEntity<ClientNameEmailOrdersDto> save(@RequestBody ClientNameEmailPasswordDto client){
+        return ResponseEntity.ok(clientService.saveClient(client));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ClientNameEmailOrdersDto> getClientById(@PathVariable Long id){
+    public ResponseEntity<ClientNameEmailOrdersDto> getClientNameEmailOrdersDtoById(@PathVariable Long id){
         return ResponseEntity.ok(clientService.getClientNameEmailOrdersDtoById(id));
     }
 

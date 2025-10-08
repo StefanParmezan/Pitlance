@@ -1,5 +1,6 @@
 package com.example.JpaPractice.JWT;
 
+import jakarta.servlet.http.Cookie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -12,7 +13,9 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
@@ -24,9 +27,10 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain chain) throws ServletException, IOException {
-
+        System.out.println("🔍 JwtFilter вызван для: " + request.getRequestURI());
         String token = getTokenFromRequest(request);
-        System.out.println(token);
+
+        System.out.println("Валиден ли токен для " + request.getRequestURI() +  jwtService.validateToken(token));
 
         if (token != null && jwtService.validateToken(token)) {
             String username = jwtService.extractUsername(token);
@@ -42,12 +46,20 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
     private String getTokenFromRequest(HttpServletRequest request) {
-        System.out.println("Request: " + request);
         String bearerToken = request.getHeader("Authorization");
-        System.out.println("Bearer token: " + bearerToken);
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
-            System.out.println(bearerToken.substring(7));
+            System.out.println("GetTokenFromRequest " + bearerToken.substring(7));
             return bearerToken.substring(7);
+        }
+        return null;
+    }
+
+    private String getTokenFromCookie(HttpServletRequest request){
+        Cookie[] cookies = request.getCookies();
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals("jwtToken")){
+                return cookie.getValue();
+            }
         }
         return null;
     }

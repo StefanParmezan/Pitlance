@@ -7,26 +7,28 @@
     <style>
         body { font-family: Arial, sans-serif; max-width: 400px; margin: 50px auto; padding: 20px; }
         .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; }
-        input { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; }
-        button { width: 100%; padding: 10px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; }
         button:hover { background: #218838; }
-        .message { margin-top: 15px; padding: 10px; border-radius: 4px; }
-        .success { background: #d4edda; color: #155724; }
-        .error { background: #f8d7da; color: #721c24; }
+        .message { margin-top: 15px; padding: 12px; border-radius: 4px; text-align: center; }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
         .nav { text-align: center; margin-top: 20px; }
+        .nav a { color: #007bff; text-decoration: none; }
+        .nav a:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
-<h2>Вход в систему</h2>
+<h2 style="text-align: center;">Вход в систему</h2>
 <form id="loginForm">
     <div class="form-group">
         <label for="username">Имя пользователя:</label>
-        <input type="text" id="username" name="username" required>
+        <input type="text" id="username" name="username" required autocomplete="username">
     </div>
     <div class="form-group">
         <label for="password">Пароль:</label>
-        <input type="password" id="password" name="password" required>
+        <input type="password" id="password" name="password" required autocomplete="current-password">
     </div>
     <button type="submit">Войти</button>
 </form>
@@ -39,28 +41,28 @@
 </div>
 
 <script>
-    // --- Работа с cookies ---
+    // --- Надёжная работа с cookies (без decodeURIComponent) ---
     function setCookie(name, value, days = 7) {
         const expires = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toUTCString();
-        document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/; SameSite=Lax`;
+        document.cookie = `${name}=${value}; expires=${expires}; path=/; SameSite=Lax`;
     }
 
     function getCookie(name) {
-        const value = `; ${document.cookie}`;
-        const parts = value.split(`; ${name}=`);
-        if (parts.length === 2) {
-            return decodeURIComponent(parts.pop().split(';').shift());
-        }
-        return null;
+        return document.cookie
+            .split('; ')
+            .find(row => row.startsWith(name + '='))
+            ?.split('=')[1] || null;
     }
 
     function deleteCookie(name) {
         document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; SameSite=Lax`;
     }
 
-    // --- Обработка формы входа ---
+    // --- Обработка входа ---
     document.getElementById('loginForm').addEventListener('submit', async function(e) {
         e.preventDefault();
+        const messageDiv = document.getElementById('message');
+        messageDiv.innerHTML = '';
 
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
@@ -72,35 +74,52 @@
                 body: JSON.stringify({ username, password })
             });
 
-            const messageDiv = document.getElementById('message');
+            let data;
+            try {
+                data = await response.json();
+            } catch (e) {
+                const text = await response.text();
+                console.error('Сервер вернул не JSON:', text);
+                messageDiv.innerHTML = `<div class="error">Ошибка: недопустимый формат ответа</div>`;
+                return;
+            }
 
             if (response.ok) {
-                const authData = await response.json();
-                // Сохраняем данные
-                setCookie('jwtToken', authData.token);
-                setCookie('username', authData.username);
+                if (!data.token || !data.id) {
+                    console.error('Ответ не содержит token или id:', data);
+                    messageDiv.innerHTML = `<div class="error">Ошибка: не хватает данных сессии</div>`;
+                    return;
+                }
 
-                messageDiv.innerHTML = `<div class="success">Авторизация успешна! Добро пожаловать, ${authData.username}</div>`;
+                // Сохраняем ВСЁ без кодирования
+                setCookie('jwtToken', data.token);
+                setCookie('username', data.username || username);
+                setCookie('userId', data.id);
 
-                // Переходим на /profile — она сама проверит токен
+                // Отладка
+                console.log('✅ Сессия сохранена:');
+                console.log('jwtToken:', getCookie('jwtToken'));
+                console.log('userId:', getCookie('userId'));
+
+                messageDiv.innerHTML = `<div class="success">Авторизация успешна! Добро пожаловать, ${data.username || username}</div>`;
+
                 setTimeout(() => {
                     window.location.href = '/profile';
                 }, 1000);
             } else {
-                const errorText = await response.text();
-                messageDiv.innerHTML = `<div class="error">Ошибка авторизации: ${errorText || 'Неверные данные'}</div>`;
+                const msg = data.message || data.error || 'Неверные данные';
+                messageDiv.innerHTML = `<div class="error">Ошибка: ${msg}</div>`;
             }
-        } catch (error) {
-            document.getElementById('message').innerHTML = `<div class="error">Ошибка сети: ${error.message}</div>`;
+        } catch (err) {
+            console.error('Сетевая ошибка:', err);
+            messageDiv.innerHTML = `<div class="error">Ошибка подключения: ${err.message}</div>`;
         }
     });
 
-    // --- Если уже авторизован — показываем сообщение ---
-    const existingToken = getCookie('jwtToken');
-    const existingUser = getCookie('username');
-    if (existingToken && existingUser) {
+    // --- Проверка существующей сессии ---
+    if (getCookie('jwtToken') && getCookie('username')) {
         document.getElementById('message').innerHTML =
-            `<div class="success">Вы уже вошли как ${existingUser}.</div>`;
+            `<div class="success">Вы уже вошли как ${getCookie('username')}.</div>`;
     }
 </script>
 </body>

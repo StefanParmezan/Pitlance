@@ -1,4 +1,4 @@
 package com.example.JpaPractice.Models.Auth;
 
-public record AuthResponse(String token, String username) {
+public record AuthResponse(Long id, String token, String username) {
 }

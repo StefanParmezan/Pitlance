@@ -2,6 +2,7 @@ package com.example.JpaPractice.Services;
 
 import com.example.JpaPractice.Models.ClientModelAndDTO.Client;
 import com.example.JpaPractice.Models.ClientModelAndDTO.ClientNameEmailOrdersDto;
+import com.example.JpaPractice.Models.ClientModelAndDTO.ClientNameEmailPasswordDto;
 import com.example.JpaPractice.Models.OrderModelAndDTO.Order;
 import com.example.JpaPractice.Models.OrderModelAndDTO.OrderUserIdStatusCreatedAtId;
 import com.example.JpaPractice.Models.StatusAndDTO.Status;
@@ -34,10 +35,12 @@ public class ClientService {
 
     //Methods
 
-    public Client saveClient(Client client) {
+    public ClientNameEmailOrdersDto saveClient(ClientNameEmailPasswordDto clientNameEmailPasswordDto) {
+        Client client = new Client(clientNameEmailPasswordDto.name(), clientNameEmailPasswordDto.email(), clientNameEmailPasswordDto.password());
         String hashedPassword = passwordEncoder.encode(client.getPassword());
         client.setPassword(hashedPassword);
-        return clientRepository.save(client);
+        clientRepository.save(client);
+        return ClientNameEmailOrdersDto.of(client);
     }
 
     public Client getClientById(Long id){
@@ -45,7 +48,9 @@ public class ClientService {
     }
 
     public ClientNameEmailOrdersDto getClientNameEmailOrdersDtoById(Long id){
-        return ClientNameEmailOrdersDto.of(getClientById(id));
+        ClientNameEmailOrdersDto clientNameEmailOrdersDto = ClientNameEmailOrdersDto.of(getClientById(id));
+        System.out.println(clientNameEmailOrdersDto.toString());
+        return clientNameEmailOrdersDto;
     }
 
     public Client getClientByName(String name) {
