@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-@Component
+
 public class JwtFilter extends OncePerRequestFilter {
 
     @Autowired
@@ -30,7 +30,7 @@ public class JwtFilter extends OncePerRequestFilter {
         System.out.println("🔍 JwtFilter вызван для: " + request.getRequestURI());
         String token = getTokenFromRequest(request);
 
-        System.out.println("Валиден ли токен для " + request.getRequestURI() +  jwtService.validateToken(token));
+        System.out.println("Валиден ли токен для " + request.getRequestURI() + " " +  jwtService.validateToken(token));
 
         if (token != null && jwtService.validateToken(token)) {
             String username = jwtService.extractUsername(token);

@@ -20,12 +20,6 @@ public class SecurityConfig {
 
     @Autowired
     private JwtService jwtService;
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
@@ -43,4 +37,10 @@ public class SecurityConfig {
     public JwtFilter jwtFilter() {
         return new JwtFilter();
     }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
 }
