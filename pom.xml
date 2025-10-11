@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example</groupId>
-    <artifactId>JpaPractice</artifactId>
+    <artifactId>Pitlance</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>JpaPractice</name>
     <description>Spring Boot project</description>

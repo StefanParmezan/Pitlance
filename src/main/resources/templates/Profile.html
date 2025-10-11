@@ -35,18 +35,18 @@
     .profile-info strong {
       color: #495057;
     }
-    .orders-section h2 {
+    .items-section h2 {
       margin-top: 0;
       color: #28a745;
     }
-    .order-item {
+    .item-item {
       background: #f8f9fa;
       border-left: 4px solid #28a745;
       padding: 15px;
       margin: 15px 0;
       border-radius: 0 6px 6px 0;
     }
-    .order-id {
+    .item-id {
       font-weight: bold;
       color: #007bff;
     }
@@ -63,11 +63,11 @@
     button:hover {
       background: #c82333;
     }
-    .btn-add-order {
+    .btn-add-item {
       background: #28a745;
       margin-bottom: 20px;
     }
-    .btn-add-order:hover {
+    .btn-add-item:hover {
       background: #218838;
     }
     .loading {
@@ -90,7 +90,7 @@
   <button onclick="logout()">Выйти</button>
 </div>
 
-<button class="btn-add-order" onclick="addOrder()">Добавить заказ</button>
+<button class="btn-add-item" onclick="addOrder()">Добавить заказ</button>
 
 <div id="content">
   <p class="loading">Загрузка данных профиля...</p>
@@ -99,6 +99,15 @@
 <script>
   // --- Выход из системы ---
   function logout() {
+    localStorage.removeItem('jwtToken');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('username');
+    window.location.href = '/login';
+  }
+
+  // --- Всплывающее окно ошибки и редирект ---
+  function handleAuthError() {
+    alert('❌ Сессия истекла или токен недействителен. Пожалуйста, войдите снова.');
     localStorage.removeItem('jwtToken');
     localStorage.removeItem('userId');
     localStorage.removeItem('username');
@@ -116,13 +125,18 @@
     }
 
     try {
-      const response = await fetch(`/client/orders/${userId}`, {
+      const response = await fetch(`/client/items/${userId}`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
         }
       });
+
+      if (response.status === 403) {
+        handleAuthError();
+        return;
+      }
 
       if (response.ok) {
         alert('✅ Заказ успешно добавлен!');
@@ -161,6 +175,11 @@
 
       console.log('Статус ответа:', response.status);
 
+      if (response.status === 403) {
+        handleAuthError();
+        return;
+      }
+
       if (response.ok) {
         const data = await response.json();
 
@@ -175,12 +194,12 @@
           });
 
         // Генерируем HTML для заказов
-        const ordersHtml = data.orders && data.orders.length > 0
-          ? data.orders.map(order => `
-              <div class="order-item">
-                <div><span class="order-id">Заказ #${order.id}</span></div>
-                <div><strong>Статус:</strong> ${order.status}</div>
-                <div><strong>Создан:</strong> ${formatDate(order.createdAt)}</div>
+        const ordersHtml = data.items && data.items.length > 0
+          ? data.items.map(item => `
+              <div class="item-item">
+                <div><span class="item-id">Заказ #${item.id}</span></div>
+                <div><strong>Статус:</strong> ${item.status}</div>
+                <div><strong>Создан:</strong> ${formatDate(item.createdAt)}</div>
               </div>
             `).join('')
           : '<p>У вас пока нет заказов.</p>';
@@ -195,8 +214,8 @@
             </div>
           </div>
 
-          <div class="orders-section">
-            <h2>Мои заказы (${data.orders ? data.orders.length : 0})</h2>
+          <div class="items-section">
+            <h2>Мои заказы (${data.items ? data.items.length : 0})</h2>
             ${ordersHtml}
           </div>
         `;
