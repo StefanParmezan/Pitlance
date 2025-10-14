@@ -16,13 +16,16 @@ public class Seller {
     private Long id;
 
     @Column(name = "company_name")
-    private String companyName;
+    private String sellerName;
 
     @OneToMany(mappedBy = "seller")
     private final List<Item> items = new ArrayList<>();
     
     @Column(name = "taxPayerId")
     private Integer taxPayerId;
+
+    @Column(name = "balance")
+    private Integer balance = 0;
 
     //Constructors
 
@@ -46,5 +49,21 @@ public class Seller {
 
     public void setTaxPayerId(Integer taxPayerId) {
         this.taxPayerId = taxPayerId;
+    }
+
+    public String getSellerName() {
+        return sellerName;
+    }
+
+    public void setSellerName(String sellerName) {
+        this.sellerName = sellerName;
+    }
+
+    public Integer getBalance() {
+        return balance;
+    }
+
+    public void setBalance(Integer balance) {
+        this.balance = balance;
     }
 }

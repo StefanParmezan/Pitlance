@@ -8,7 +8,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name="cart")
+@Table(name="items")
 public class Item {
     //Variables
     @Id
@@ -110,6 +110,14 @@ public class Item {
 
     public void setItemName(String itemName) {
         this.itemName = itemName;
+    }
+
+    public Seller getSeller() {
+        return seller;
+    }
+
+    public void setSeller(Seller seller) {
+        this.seller = seller;
     }
 
     //Other methods
