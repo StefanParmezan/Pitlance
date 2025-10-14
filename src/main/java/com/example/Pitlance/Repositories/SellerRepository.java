@@ -1,6 +1,6 @@
 package com.example.Pitlance.Repositories;
 
-import com.example.Pitlance.Models.SalesMan.Seller;
+import com.example.Pitlance.Models.SellerModelAndDTO.Seller;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

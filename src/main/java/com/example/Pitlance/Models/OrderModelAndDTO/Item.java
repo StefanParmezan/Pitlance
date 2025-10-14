@@ -1,7 +1,7 @@
 package com.example.Pitlance.Models.OrderModelAndDTO;
 
 import com.example.Pitlance.Models.ClientModelAndDTO.Client;
-import com.example.Pitlance.Models.SalesMan.Seller;
+import com.example.Pitlance.Models.SellerModelAndDTO.Seller;
 import com.example.Pitlance.Models.StatusAndDTO.Status;
 import jakarta.persistence.*;
 

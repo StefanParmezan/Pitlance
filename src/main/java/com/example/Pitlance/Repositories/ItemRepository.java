@@ -2,7 +2,7 @@ package com.example.Pitlance.Repositories;
 
 import com.example.Pitlance.Models.ClientModelAndDTO.Client;
 import com.example.Pitlance.Models.OrderModelAndDTO.Item;
-import com.example.Pitlance.Models.SalesMan.Seller;
+import com.example.Pitlance.Models.SellerModelAndDTO.Seller;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

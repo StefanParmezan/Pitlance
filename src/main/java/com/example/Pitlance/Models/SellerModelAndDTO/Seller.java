@@ -1,4 +1,4 @@
-package com.example.Pitlance.Models.SalesMan;
+package com.example.Pitlance.Models.SellerModelAndDTO;
 
 import com.example.Pitlance.Models.OrderModelAndDTO.Item;
 import jakarta.persistence.*;
@@ -70,5 +70,13 @@ public class Seller {
 
     public void setBalance(Integer balance) {
         this.balance = balance;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

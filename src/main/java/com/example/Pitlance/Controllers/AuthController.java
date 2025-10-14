@@ -1,7 +1,7 @@
 package com.example.Pitlance.Controllers;
 import com.example.Pitlance.JWT.JwtService;
-import com.example.Pitlance.Models.Auth.AuthResponse;
-import com.example.Pitlance.Models.Auth.LoginRequest;
+import com.example.Pitlance.Models.AuthModelAndDTO.AuthResponse;
+import com.example.Pitlance.Models.AuthModelAndDTO.LoginRequest;
 import com.example.Pitlance.Services.AuthService;
 import com.example.Pitlance.Services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
