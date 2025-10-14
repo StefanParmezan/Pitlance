@@ -18,6 +18,11 @@ public class Seller {
     @Column(name = "company_name")
     private String sellerName;
 
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "phone_number")
+
     @OneToMany(mappedBy = "seller")
     private final List<Item> items = new ArrayList<>();
     
