@@ -15,8 +15,8 @@ public class Client {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name="name")
-    private String name;
+    @Column(name="itemName")
+    private String clientName;
 
     @Column(name = "password")
     private String password;
@@ -25,16 +25,19 @@ public class Client {
     private String email;
 
     @OneToMany(mappedBy = "client")
-    List<Item> cart = new ArrayList<>();
+    private final List<Item> cart = new ArrayList<>();
 
     @Column(name="balance")
-    private Integer balance;
+    private Integer balance = 0;
+
+    @Column(name="phone_number")
+    private Integer phoneNumber;
 
     //Constructors
     public Client(){}
 
-    public Client(String name, String email, String password){
-        this.name = name;
+    public Client(String clientName, String email, String password){
+        this.clientName = clientName;
         this.email = email;
         this.password = password;
     }
@@ -50,12 +53,12 @@ public class Client {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getClientName() {
+        return clientName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setClientName(String clientName) {
+        this.clientName = clientName;
     }
 
     public String getEmail() {
@@ -78,15 +81,23 @@ public class Client {
         return cart;
     }
 
-    public void setCart(List<Item> cart) {
-        this.cart = cart;
-    }
-
     public Integer getBalance() {
         return balance;
     }
 
     public void setBalance(int balance) {
+        this.balance = balance;
+    }
+
+    public Integer getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(Integer phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public void setBalance(Integer balance) {
         this.balance = balance;
     }
 

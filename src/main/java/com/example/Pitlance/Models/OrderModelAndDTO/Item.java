@@ -1,6 +1,7 @@
 package com.example.Pitlance.Models.OrderModelAndDTO;
 
 import com.example.Pitlance.Models.ClientModelAndDTO.Client;
+import com.example.Pitlance.Models.SalesMan.Seller;
 import com.example.Pitlance.Models.StatusAndDTO.Status;
 import jakarta.persistence.*;
 
@@ -15,14 +16,15 @@ public class Item {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column
-    private String name;
+    @Column(name = "item_name")
+    private String itemName;
 
-    @Column
+    @Column(name = "price")
     private int price;
 
-    @Column
+    @Column(name = "quantity")
     private int quantity;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cart")
@@ -35,6 +37,10 @@ public class Item {
     @Enumerated(EnumType.STRING)
     private Status status;
 
+    @ManyToOne
+    @JoinColumn(name="seller")
+    private Seller seller;
+
 
     //Constructors
 
@@ -42,8 +48,8 @@ public class Item {
 
     }
 
-    public Item(String name, int price){
-        this.name = name;
+    public Item(String itemName, int price){
+        this.itemName = itemName;
         this.price = price;
     }
 
@@ -98,12 +104,12 @@ public class Item {
         this.quantity = quantity;
     }
 
-    public String getName() {
-        return name;
+    public String getItemName() {
+        return itemName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
     }
 
     //Other methods

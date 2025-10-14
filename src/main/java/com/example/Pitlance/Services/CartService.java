@@ -3,6 +3,7 @@ package com.example.Pitlance.Services;
 import com.example.Pitlance.Models.ClientModelAndDTO.Client;
 import com.example.Pitlance.Models.ClientModelAndDTO.ClientNameEmailItemsDto;
 import com.example.Pitlance.Models.OrderModelAndDTO.Item;
+import com.example.Pitlance.Models.OrderModelAndDTO.ItemClientIdId;
 import com.example.Pitlance.Repositories.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,9 +23,9 @@ public class CartService {
     }
 
     @Transactional
-    public ClientNameEmailItemsDto addItemToCart(Long clientId, Long itemId){
-        Client client = clientService.getClientById(clientId);
-        Item item = itemService.getItemById(itemId);
+    public ClientNameEmailItemsDto addItemToCart(ItemClientIdId itemClientIdId){
+        Client client = clientService.getClientById(itemClientIdId.clientId());
+        Item item = itemService.getItemById(itemClientIdId.itemId());
         client.addItemToCart(item);
         return ClientNameEmailItemsDto.of(client);
     }

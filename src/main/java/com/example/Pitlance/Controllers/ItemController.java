@@ -1,7 +1,5 @@
 package com.example.Pitlance.Controllers;
 
-import com.example.Pitlance.Models.ClientModelAndDTO.ClientNameEmailItemsDto;
-import com.example.Pitlance.Models.ClientModelAndDTO.ClientNameEmailPasswordDto;
 import com.example.Pitlance.Models.OrderModelAndDTO.ItemIdNamePrice;
 import com.example.Pitlance.Models.OrderModelAndDTO.ItemNamePrice;
 import com.example.Pitlance.Services.ItemService;
@@ -11,7 +9,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/items")
@@ -26,7 +23,7 @@ public class ItemController {
 
     @PostMapping
     public ResponseEntity<ItemIdNamePrice> save(@RequestBody ItemNamePrice itemNamePrice){
-        System.out.println(itemNamePrice.name() + " " + itemNamePrice.price());
+        System.out.println(itemNamePrice.itemName() + " " + itemNamePrice.price());
         return ResponseEntity.ok(itemService.save(itemNamePrice));
     }
 }

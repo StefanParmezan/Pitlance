@@ -24,8 +24,8 @@ public class ItemService {
 
     @Transactional
     public ItemIdNamePrice save(ItemNamePrice itemNamePrice) {
-        Item item = new Item(itemNamePrice.name(), itemNamePrice.price());
-        System.out.println(item.getName() + " " + item.getPrice());
+        Item item = new Item(itemNamePrice.itemName(), itemNamePrice.price());
+        System.out.println(item.getItemName() + " " + item.getPrice());
         return ItemIdNamePrice.of(itemRepository.save(item));
     }
 }
