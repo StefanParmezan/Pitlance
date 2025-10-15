@@ -5,10 +5,7 @@ import com.example.Pitlance.Models.OrderModelAndDTO.ItemClientIdId;
 import com.example.Pitlance.Services.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/cart")
@@ -21,7 +18,7 @@ public class CartController {
         this.cartService = cartService;
     }
 
-    @RequestMapping
+    @PostMapping
     public ResponseEntity<ClientNameEmailItemsDto> addItemToCart(@RequestBody ItemClientIdId itemClientIdId){
         return ResponseEntity.ok(cartService.addItemToCart(itemClientIdId));
     }
