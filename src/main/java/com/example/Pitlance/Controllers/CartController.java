@@ -1,6 +1,6 @@
 package com.example.Pitlance.Controllers;
 
-import com.example.Pitlance.Models.ClientModelAndDTO.ClientNameEmailItemsDto;
+import com.example.Pitlance.Models.ClientModelAndDTO.ClientNameEmailItems;
 import com.example.Pitlance.Models.OrderModelAndDTO.ItemClientIdId;
 import com.example.Pitlance.Services.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ public class CartController {
     }
 
     @PostMapping
-    public ResponseEntity<ClientNameEmailItemsDto> addItemToCart(@RequestBody ItemClientIdId itemClientIdId){
+    public ResponseEntity<ClientNameEmailItems> addItemToCart(@RequestBody ItemClientIdId itemClientIdId){
         return ResponseEntity.ok(cartService.addItemToCart(itemClientIdId));
     }
 }

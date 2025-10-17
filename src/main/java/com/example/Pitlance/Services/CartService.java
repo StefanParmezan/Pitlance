@@ -1,10 +1,9 @@
 package com.example.Pitlance.Services;
 
 import com.example.Pitlance.Models.ClientModelAndDTO.Client;
-import com.example.Pitlance.Models.ClientModelAndDTO.ClientNameEmailItemsDto;
+import com.example.Pitlance.Models.ClientModelAndDTO.ClientNameEmailItems;
 import com.example.Pitlance.Models.OrderModelAndDTO.Item;
 import com.example.Pitlance.Models.OrderModelAndDTO.ItemClientIdId;
-import com.example.Pitlance.Repositories.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,10 +22,10 @@ public class CartService {
     }
 
     @Transactional
-    public ClientNameEmailItemsDto addItemToCart(ItemClientIdId itemClientIdId){
+    public ClientNameEmailItems addItemToCart(ItemClientIdId itemClientIdId){
         Client client = clientService.getClientById(itemClientIdId.clientId());
         Item item = itemService.getItemById(itemClientIdId.itemId());
         client.addItemToCart(item);
-        return ClientNameEmailItemsDto.of(client);
+        return ClientNameEmailItems.of(client);
     }
 }

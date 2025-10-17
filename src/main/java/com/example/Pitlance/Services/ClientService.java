@@ -1,8 +1,8 @@
 package com.example.Pitlance.Services;
 
 import com.example.Pitlance.Models.ClientModelAndDTO.Client;
-import com.example.Pitlance.Models.ClientModelAndDTO.ClientNameEmailItemsDto;
-import com.example.Pitlance.Models.ClientModelAndDTO.ClientNameEmailPasswordDto;
+import com.example.Pitlance.Models.ClientModelAndDTO.ClientNameEmailItems;
+import com.example.Pitlance.Models.ClientModelAndDTO.ClientNameEmailPassword;
 import com.example.Pitlance.Repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,26 +24,26 @@ public class ClientService {
 
     //Methods
 
-    public ClientNameEmailItemsDto save(ClientNameEmailPasswordDto clientNameEmailPasswordDto) {
-        Client client = new Client(clientNameEmailPasswordDto.name(), clientNameEmailPasswordDto.email(), clientNameEmailPasswordDto.password());
+    public ClientNameEmailItems save(ClientNameEmailPassword clientNameEmailPassword) {
+        Client client = new Client(clientNameEmailPassword.name(), clientNameEmailPassword.email(), clientNameEmailPassword.password());
         String hashedPassword = passwordEncoder.encode(client.getPassword());
         client.setPassword(hashedPassword);
         clientRepository.save(client);
-        return ClientNameEmailItemsDto.of(client);
+        return ClientNameEmailItems.of(client);
     }
 
     public Client getClientById(Long id){
         return clientRepository.getClientById(id).orElseThrow();
     }
 
-    public ClientNameEmailItemsDto getClientNameEmailOrdersDtoById(Long id){
-        ClientNameEmailItemsDto clientNameEmailItemsDto = ClientNameEmailItemsDto.of(getClientById(id));
-        System.out.println(clientNameEmailItemsDto.toString());
-        return clientNameEmailItemsDto;
+    public ClientNameEmailItems getClientNameEmailOrdersDtoById(Long id){
+        ClientNameEmailItems clientNameEmailItems = ClientNameEmailItems.of(getClientById(id));
+        System.out.println(clientNameEmailItems.toString());
+        return clientNameEmailItems;
     }
 
     public Client getClientByName(String name) {
-        return clientRepository.getClientByName(name).orElseThrow();
+        return clientRepository.getClientByClientName(name).orElseThrow();
     }
 
 

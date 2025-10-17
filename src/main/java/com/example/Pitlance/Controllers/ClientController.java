@@ -1,7 +1,7 @@
 package com.example.Pitlance.Controllers;
 
-import com.example.Pitlance.Models.ClientModelAndDTO.ClientNameEmailPasswordDto;
-import com.example.Pitlance.Models.ClientModelAndDTO.ClientNameEmailItemsDto;
+import com.example.Pitlance.Models.ClientModelAndDTO.ClientNameEmailPassword;
+import com.example.Pitlance.Models.ClientModelAndDTO.ClientNameEmailItems;
 import com.example.Pitlance.Services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,12 +19,12 @@ public class ClientController {
     }
 
     @PostMapping
-    public ResponseEntity<ClientNameEmailItemsDto> save(@RequestBody ClientNameEmailPasswordDto client){
+    public ResponseEntity<ClientNameEmailItems> save(@RequestBody ClientNameEmailPassword client){
         return ResponseEntity.ok(clientService.save(client));
     }
 
     @GetMapping("/{clientId}")
-    public ResponseEntity<ClientNameEmailItemsDto> getClientNameEmailOrdersDtoById(@PathVariable Long clientId){
+    public ResponseEntity<ClientNameEmailItems> getClientNameEmailOrdersDtoById(@PathVariable Long clientId){
         return ResponseEntity.ok(clientService.getClientNameEmailOrdersDtoById(clientId));
     }
 }

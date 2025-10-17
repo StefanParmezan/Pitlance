@@ -15,7 +15,7 @@ public class Client {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name="itemName")
+    @Column(name= "client_name")
     private String clientName;
 
     @Column(name = "password")

@@ -8,6 +8,6 @@ import java.util.Optional;
 
 @Repository
 public interface ClientRepository extends JpaRepository<Client, Long> {
-    Optional<Client> getClientByName(String name);
+    Optional<Client> getClientByClientName(String name);
     Optional<Client>getClientById(Long id);
 }

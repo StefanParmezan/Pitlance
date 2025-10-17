@@ -4,10 +4,10 @@ import com.example.Pitlance.Models.OrderModelAndDTO.ItemUserIdStatusCreatedAtId;
 
 import java.util.List;
 
-public record ClientNameEmailItemsDto(Long id, String clientName, String email, List<ItemUserIdStatusCreatedAtId> cart) {
-    public static ClientNameEmailItemsDto of(Client client){
+public record ClientNameEmailItems(Long id, String clientName, String email, List<ItemUserIdStatusCreatedAtId> cart) {
+    public static ClientNameEmailItems of(Client client){
         List<ItemUserIdStatusCreatedAtId> itemUserIdStatusCreatedAtIdList = client.getCart().stream().map(ItemUserIdStatusCreatedAtId::of).toList();
-        return new ClientNameEmailItemsDto(client.getId(), client.getClientName(), client.getEmail(), itemUserIdStatusCreatedAtIdList);
+        return new ClientNameEmailItems(client.getId(), client.getClientName(), client.getEmail(), itemUserIdStatusCreatedAtIdList);
     }
 
     @Override

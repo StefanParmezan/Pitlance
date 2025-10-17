@@ -22,6 +22,7 @@ public class Seller {
     private String email;
 
     @Column(name = "phone_number")
+    private Integer phoneNumber;
 
     @OneToMany(mappedBy = "seller")
     private final List<Item> items = new ArrayList<>();
@@ -32,8 +33,21 @@ public class Seller {
     @Column(name = "balance")
     private Integer balance = 0;
 
-    //Constructors
+    @Column(name = "password")
+    private String password;
 
+    public Seller() {
+    }
+
+    //Constructors
+    public Seller(String sellerName, String email, Integer phoneNumber, Integer taxPayerId, Integer balance, String password){
+        this.sellerName = sellerName;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.taxPayerId = taxPayerId;
+        this.balance = balance;
+        this.password = password;
+    }
 
     //Getters and Setters
     public List<Item> getItems() {
@@ -78,5 +92,21 @@ public class Seller {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Integer getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(Integer phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
