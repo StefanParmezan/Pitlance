@@ -16,7 +16,13 @@ public class Seller {
     private Long id;
 
     @Column(name = "company_name")
+    private String companyName;
+
+    @Column(name = "seller_name")
     private String sellerName;
+
+    @Column(name = "seller_last_name")
+    private String sellerLastName;
 
     @Column(name = "email")
     private String email;
@@ -28,7 +34,7 @@ public class Seller {
     private final List<Item> items = new ArrayList<>();
     
     @Column(name = "taxPayerId")
-    private Integer taxPayerId;
+    private String taxPayerId;
 
     @Column(name = "balance")
     private Integer balance = 0;
@@ -40,8 +46,10 @@ public class Seller {
     }
 
     //Constructors
-    public Seller(String sellerName, String email, Integer phoneNumber, Integer taxPayerId, Integer balance, String password){
+    public Seller(String companyName, String sellerName, String sellerLastName, String email, Integer phoneNumber, String taxPayerId, Integer balance, String password){
+        this.companyName = companyName;
         this.sellerName = sellerName;
+        this.sellerLastName = sellerLastName;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.taxPayerId = taxPayerId;
@@ -62,20 +70,20 @@ public class Seller {
         this.id = id;
     }
 
-    public Integer getTaxPayerId() {
+    public String getTaxPayerId() {
         return taxPayerId;
     }
 
-    public void setTaxPayerId(Integer taxPayerId) {
+    public void setTaxPayerId(String taxPayerId) {
         this.taxPayerId = taxPayerId;
     }
 
-    public String getSellerName() {
-        return sellerName;
+    public String getCompanyName() {
+        return companyName;
     }
 
-    public void setSellerName(String sellerName) {
-        this.sellerName = sellerName;
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
     }
 
     public Integer getBalance() {
@@ -108,5 +116,21 @@ public class Seller {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getSellerName() {
+        return sellerName;
+    }
+
+    public void setSellerName(String sellerName) {
+        this.sellerName = sellerName;
+    }
+
+    public String getSellerLastName() {
+        return sellerLastName;
+    }
+
+    public void setSellerLastName(String sellerLastName) {
+        this.sellerLastName = sellerLastName;
     }
 }

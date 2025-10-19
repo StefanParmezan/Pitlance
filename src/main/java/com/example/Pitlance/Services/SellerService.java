@@ -18,11 +18,14 @@ public class SellerService {
 
     public Seller save(SellerNameEmailBalancePhonePasswordTPI sellerNameEmailBalancePhonePasswordTPI){
         return sellerRepository.save(new Seller(
+                sellerNameEmailBalancePhonePasswordTPI.companyName(),
                 sellerNameEmailBalancePhonePasswordTPI.sellerName(),
+                sellerNameEmailBalancePhonePasswordTPI.sellerLastName(),
                 sellerNameEmailBalancePhonePasswordTPI.email(),
                 sellerNameEmailBalancePhonePasswordTPI.phoneNumber(),
                 sellerNameEmailBalancePhonePasswordTPI.taxPayerId(),
                 sellerNameEmailBalancePhonePasswordTPI.balance(),
-                sellerNameEmailBalancePhonePasswordTPI.password()));
+                sellerNameEmailBalancePhonePasswordTPI.password()
+                ));
     }
 }
