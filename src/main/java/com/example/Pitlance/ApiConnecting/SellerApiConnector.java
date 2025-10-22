@@ -1,16 +1,25 @@
 package com.example.Pitlance.ApiConnecting;
 
-import com.example.Pitlance.Models.SellerModelAndDTO.SellerEmailPhonePasswordTPI;
-import com.example.Pitlance.Models.SellerModelAndDTO.SellerNameEmailBalancePhonePasswordTPI;
+import org.springframework.http.MediaType;
+import org.springframework.web.client.RestClient;
 
 public class SellerApiConnector {
-    private static final String taxPayerIdApi = "https://suggestions.dadata.ru/suggestions/api/4_1/rs/findById/party";
+    private final RestClient restClient = RestClient.create("https://suggestions.dadata.ru/suggestions/api/4_1/rs/findById/party");
 
-    public SellerNameEmailBalancePhonePasswordTPI validateSellerByTPI(SellerEmailPhonePasswordTPI seller){
+    public String validateSellerByTPI() {
+        String requestBody = """
+            {
+                "query": "7707083893"
+            }
+            """;
 
-    }
-
-    public String getTaxPayerIdApi(){
-        return taxPayerIdApi;
+        // Отправляем запрос
+        return restClient.post()
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Token df9c9b7b020887e03d8aa2c1e1ab5fcbd2608b53")
+                .body(requestBody)
+                .retrieve()
+                .body(String.class);
     }
 }
