@@ -1,19 +1,19 @@
 package com.example.Pitlance.ApiConnecting;
 
+import com.example.Pitlance.Models.SellerModelAndDTO.SellerEmailPhonePasswordTPI;
 import org.springframework.http.MediaType;
 import org.springframework.web.client.RestClient;
 
 public class SellerApiConnector {
     private final RestClient restClient = RestClient.create("https://suggestions.dadata.ru/suggestions/api/4_1/rs/findById/party");
 
-    public String validateSellerByTPI() {
+    public String validateSellerByTPI(SellerEmailPhonePasswordTPI sellerEmailPhonePasswordTPI) {
         String requestBody = """
             {
                 "query": "7707083893"
             }
             """;
 
-        // Отправляем запрос
         return restClient.post()
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
