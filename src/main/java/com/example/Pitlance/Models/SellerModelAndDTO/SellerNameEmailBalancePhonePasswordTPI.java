@@ -4,4 +4,18 @@ public record SellerNameEmailBalancePhonePasswordTPI(String companyName, String 
     public static SellerNameEmailBalancePhonePasswordTPI of(Seller seller){
         return new SellerNameEmailBalancePhonePasswordTPI(seller.getCompanyName(), seller.getSellerName(), seller.getSellerLastName(), seller.getEmail(), seller.getPhoneNumber(), seller.getTaxPayerId(), seller.getBalance(), seller.getPassword());
     }
+
+    @Override
+    public String toString() {
+        return "SellerNameEmailBalancePhonePasswordTPI{" +
+                "\ncompanyName='" + companyName + '\n' +
+                ",sellerName='" + sellerName + '\n' +
+                ",sellerLastName='" + sellerLastName + '\n' +
+                ",email='" + email + '\n' +
+                ",phoneNumber=" + phoneNumber + "\n" +
+                ",taxPayerId='" + taxPayerId + '\n' +
+                ",balance=" + balance + '\n' +
+                ",password='" + password + '\n' +
+                '}';
+    }
 }
