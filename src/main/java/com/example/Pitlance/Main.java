@@ -11,7 +11,7 @@ public class Main {
     public static void main(String[] args){
         SpringApplication.run(Main.class, args);
         SellerApiConnector sellerApiConnector = new SellerApiConnector();
-        SellerEmailPhonePasswordTPI s = new SellerEmailPhonePasswordTPI("s", 123, "123", "7707083893");
+        SellerEmailPhonePasswordTPI s = new SellerEmailPhonePasswordTPI("s", 123, "123", "480890658628");
         System.out.println(sellerApiConnector.validateSellerByTPI(s));
     }
 }

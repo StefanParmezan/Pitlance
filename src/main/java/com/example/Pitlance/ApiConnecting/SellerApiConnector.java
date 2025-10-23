@@ -14,63 +14,45 @@ public class SellerApiConnector {
 
     public SellerNameEmailBalancePhonePasswordTPI validateSellerByTPI(SellerEmailPhonePasswordTPI sellerEmailPhonePasswordTPI) {
 
-        String rawResponse = restClient.post()
-                .header("Authorization", "Token df9c9b7b020887e03d8aa2c1e1ab5fcbd2608b53")
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(Map.of("query", sellerEmailPhonePasswordTPI.taxPayerId()))
-                .retrieve()
-                .body(String.class);
-
-        System.out.println("RAW RESPONSE: " + rawResponse);
-
         Map<String, Object> response = restClient.post()
                 .header("Authorization", "Token df9c9b7b020887e03d8aa2c1e1ab5fcbd2608b53")
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(Map.of("query", sellerEmailPhonePasswordTPI.taxPayerId()))
+                .body(Map.of(
+                        "query", sellerEmailPhonePasswordTPI.taxPayerId(),
+                        "count", 1,
+                        "type", "INDIVIDUAL"
+                ))
                 .retrieve()
                 .body(new ParameterizedTypeReference<Map<String, Object>>() {});
 
-        // Отладочная информация - посмотрим что пришло
-        System.out.println("Response keys: " + response.keySet());
-
         List<Map<String, Object>> suggestions = (List<Map<String, Object>>) response.get("suggestions");
-        System.out.println("Suggestions size: " + (suggestions != null ? suggestions.size() : 0));
 
-        if (suggestions != null && !suggestions.isEmpty()) {
-            Map<String, Object> firstSuggestion = suggestions.get(0);
-            System.out.println("First suggestion keys: " + firstSuggestion.keySet());
-
-            // Безопасное извлечение данных
-            String value = extractString(firstSuggestion, "value");
-            Map<String, Object> data = (Map<String, Object>) firstSuggestion.get("data");
-
-            if (data != null) {
-                System.out.println("Data keys: " + data.keySet());
-                String name = extractString(data, "name");
-                String fullName = extractString(data, "full_name");
-                String shortName = extractString(data, "short_name");
-
-                // Используем полученные данные
-                SellerNameEmailBalancePhonePasswordTPI seller = new SellerNameEmailBalancePhonePasswordTPI(
-                        value,
-                        name != null ? name : fullName != null ? fullName : shortName,
-                        null, // фамилия
-                        sellerEmailPhonePasswordTPI.email(),
-                        sellerEmailPhonePasswordTPI.phone(),
-                        sellerEmailPhonePasswordTPI.taxPayerId(),
-                        0,
-                        sellerEmailPhonePasswordTPI.password()
-                );
-                return seller;
-            }
+        if (suggestions == null || suggestions.isEmpty()) {
+            throw new RuntimeException("No IP suggestions found for INN: " + sellerEmailPhonePasswordTPI.taxPayerId());
         }
 
-        throw new RuntimeException("No valid data found for TPI: " + sellerEmailPhonePasswordTPI.taxPayerId());
-    }
+        Map<String, Object> firstSuggestion = suggestions.get(0);
+        Map<String, Object> data = (Map<String, Object>) firstSuggestion.get("data");
 
-    // Вспомогательный метод для безопасного извлечения строк
-    private String extractString(Map<String, Object> map, String key) {
-        Object value = map.get(key);
-        return value instanceof String ? (String) value : null;
+        // Для ИП ФИО находится в data.fio
+        Map<String, Object> fio = data != null ? (Map<String, Object>) data.get("fio") : null;
+
+        String value = (String) firstSuggestion.get("value");
+        String name = fio != null ? (String) fio.get("name") : null;
+        String surname = fio != null ? (String) fio.get("surname") : null;
+
+        SellerNameEmailBalancePhonePasswordTPI seller = new SellerNameEmailBalancePhonePasswordTPI(
+                value,
+                name,
+                surname,
+                sellerEmailPhonePasswordTPI.email(),
+                sellerEmailPhonePasswordTPI.phone(),
+                sellerEmailPhonePasswordTPI.taxPayerId(),
+                0,
+                sellerEmailPhonePasswordTPI.password()
+        );
+
+        System.out.println(seller);
+        return seller;
     }
 }
