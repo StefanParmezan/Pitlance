@@ -8,14 +8,14 @@ public record SellerNameEmailBalancePhonePasswordTPI(String companyName, String 
     @Override
     public String toString() {
         return "SellerNameEmailBalancePhonePasswordTPI{" +
-                "\ncompanyName='" + companyName + '\n' +
-                ",sellerName='" + sellerName + '\n' +
-                ",sellerLastName='" + sellerLastName + '\n' +
-                ",email='" + email + '\n' +
+                "\ncompanyName=" + companyName + '\n' +
+                ",sellerName=" + sellerName + '\n' +
+                ",sellerLastName=" + sellerLastName + '\n' +
+                ",email=" + email + '\n' +
                 ",phoneNumber=" + phoneNumber + "\n" +
-                ",taxPayerId='" + taxPayerId + '\n' +
+                ",taxPayerId=" + taxPayerId + '\n' +
                 ",balance=" + balance + '\n' +
-                ",password='" + password + '\n' +
+                ",password=" + password + '\n' +
                 '}';
     }
 }
