@@ -55,5 +55,5 @@ public class SellerApiConnector {
 
     public record Data(Fio fio) {}
 
-    public record Fio(String surname, String name, String patronymic) {}
+    public record Fio(String surname, String name) {}
 }
