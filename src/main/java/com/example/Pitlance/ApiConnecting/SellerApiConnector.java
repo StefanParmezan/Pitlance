@@ -3,11 +3,13 @@ package com.example.Pitlance.ApiConnecting;
 import com.example.Pitlance.Models.SellerModelAndDTO.SellerEmailPhonePasswordTPI;
 import com.example.Pitlance.Models.SellerModelAndDTO.SellerNameEmailBalancePhonePasswordTPI;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
 import java.util.List;
 import java.util.Map;
 
+@Service
 public class SellerApiConnector {
     private final RestClient restClient = RestClient.create("https://suggestions.dadata.ru/suggestions/api/4_1/rs/findById/party");
 

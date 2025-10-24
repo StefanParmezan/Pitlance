@@ -1,6 +1,8 @@
 package com.example.Pitlance.Services;
 
+import com.example.Pitlance.ApiConnecting.SellerApiConnector;
 import com.example.Pitlance.Models.SellerModelAndDTO.Seller;
+import com.example.Pitlance.Models.SellerModelAndDTO.SellerEmailPhonePasswordTPI;
 import com.example.Pitlance.Models.SellerModelAndDTO.SellerNameEmailBalancePhonePasswordTPI;
 import com.example.Pitlance.Repositories.SellerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,18 +12,20 @@ import org.springframework.stereotype.Service;
 @Service
 public class SellerService {
 
-    SellerRepository sellerRepository;
-
+    private final SellerRepository sellerRepository;
+    private final SellerApiConnector sellerApiConnector;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public SellerService(SellerRepository sellerRepository,
-                         PasswordEncoder passwordEncoder){
+                         PasswordEncoder passwordEncoder, SellerApiConnector sellerApiConnector){
         this.sellerRepository = sellerRepository;
         this.passwordEncoder = passwordEncoder;
+        this.sellerApiConnector = sellerApiConnector;
     }
 
-    public Seller save(SellerNameEmailBalancePhonePasswordTPI sellerNameEmailBalancePhonePasswordTPI){
+    public Seller save(SellerEmailPhonePasswordTPI sellerEmailPhonePasswordTPI){
+        SellerNameEmailBalancePhonePasswordTPI sellerNameEmailBalancePhonePasswordTPI = sellerApiConnector.validateSellerByTPI(sellerEmailPhonePasswordTPI);
         Seller seller = new Seller(
                 sellerNameEmailBalancePhonePasswordTPI.companyName(),
                 sellerNameEmailBalancePhonePasswordTPI.sellerName(),
@@ -35,4 +39,5 @@ public class SellerService {
         seller.setPassword(passwordEncoder.encode(seller.getPassword()));
         return sellerRepository.save(seller);
     }
+
 }
