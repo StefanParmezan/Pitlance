@@ -23,6 +23,7 @@ public class ItemController {
 
     @PostMapping
     public ResponseEntity<ItemIdNamePrice> save(@RequestBody ItemTPINamePrice itemTPINamePrice){
-
+        System.out.println(itemTPINamePrice);
+        return ResponseEntity.ok(itemService.save(itemTPINamePrice));
     }
 }

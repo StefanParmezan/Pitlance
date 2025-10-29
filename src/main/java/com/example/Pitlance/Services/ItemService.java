@@ -29,6 +29,7 @@ public class ItemService {
 
     @Transactional
     public ItemIdNamePrice save(ItemTPINamePrice itemTPINamePrice) {
+        System.out.println(itemTPINamePrice);
         Item item = itemRepository.save(new Item(itemTPINamePrice.itemName(), itemTPINamePrice.price(), sellerService.getSellerByTPI(itemTPINamePrice.taxPayerId())));
         return ItemIdNamePrice.of(item);
     }
