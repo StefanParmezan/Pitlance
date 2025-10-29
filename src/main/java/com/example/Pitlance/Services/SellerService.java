@@ -2,6 +2,7 @@ package com.example.Pitlance.Services;
 
 import com.example.Pitlance.ApiConnecting.SellerApiConnector;
 import com.example.Pitlance.Models.SellerModelAndDTO.Seller;
+import com.example.Pitlance.Models.SellerModelAndDTO.SellerCompanyNameEmailPhoneTPIBalance;
 import com.example.Pitlance.Models.SellerModelAndDTO.SellerEmailPhonePasswordTPI;
 import com.example.Pitlance.Models.SellerModelAndDTO.SellerNameEmailBalancePhonePasswordTPI;
 import com.example.Pitlance.Repositories.SellerRepository;
@@ -24,7 +25,7 @@ public class SellerService {
         this.sellerApiConnector = sellerApiConnector;
     }
 
-    public Seller save(SellerEmailPhonePasswordTPI sellerEmailPhonePasswordTPI){
+    public SellerCompanyNameEmailPhoneTPIBalance save(SellerEmailPhonePasswordTPI sellerEmailPhonePasswordTPI){
         SellerNameEmailBalancePhonePasswordTPI sellerNameEmailBalancePhonePasswordTPI = sellerApiConnector.validateSellerByTPI(sellerEmailPhonePasswordTPI);
         Seller seller = new Seller(
                 sellerNameEmailBalancePhonePasswordTPI.companyName(),
@@ -37,7 +38,7 @@ public class SellerService {
                 sellerNameEmailBalancePhonePasswordTPI.password()
                 );
         seller.setPassword(passwordEncoder.encode(seller.getPassword()));
-        return sellerRepository.save(seller);
+        return SellerCompanyNameEmailPhoneTPIBalance.of(sellerRepository.save(seller));
     }
 
     public Seller getSellerByTPI(String taxPayerId){

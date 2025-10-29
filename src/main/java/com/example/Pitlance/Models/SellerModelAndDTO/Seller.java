@@ -29,7 +29,7 @@ public class Seller {
     private String email;
 
     @Column(name = "phone_number")
-    private int phoneNumber;
+    private long phoneNumber;
 
     @OneToMany(mappedBy = "seller")
     private final List<Item> items = new ArrayList<>();
@@ -47,7 +47,7 @@ public class Seller {
     }
 
     //Constructors
-    public Seller(String companyName, String sellerName, String sellerLastName, String email, Integer phoneNumber, String taxPayerId, BigDecimal balance, String password){
+    public Seller(String companyName, String sellerName, String sellerLastName, String email, long phoneNumber, String taxPayerId, BigDecimal balance, String password){
         this.companyName = companyName;
         this.sellerName = sellerName;
         this.sellerLastName = sellerLastName;
@@ -103,11 +103,11 @@ public class Seller {
         this.email = email;
     }
 
-    public int getPhoneNumber() {
+    public long getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(int phoneNumber) {
+    public void setPhoneNumber(long phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 

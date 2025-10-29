@@ -6,7 +6,7 @@ import java.util.Objects;
 /**
  * DTO for {@link Seller}
  */
-public record SellerCompanyNameEmailPhoneTPIBalance (Long id, String companyName, String sellerName, BigDecimal balance, String taxPayerId, int phoneNumber, String email, String sellerLastName){
+public record SellerCompanyNameEmailPhoneTPIBalance (Long id, String companyName, String sellerName, BigDecimal balance, String taxPayerId, long phoneNumber, String email, String sellerLastName){
         public static SellerCompanyNameEmailPhoneTPIBalance of(Seller seller){
             return new SellerCompanyNameEmailPhoneTPIBalance(
                     seller.getId(),

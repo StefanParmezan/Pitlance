@@ -7,6 +7,7 @@ import com.example.Pitlance.Services.SellerService;
 import org.apache.catalina.connector.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -21,7 +22,8 @@ public class SellerController {
     }
 
     @PostMapping
-    public ResponseEntity<SellerCompanyNameEmailPhoneTPIBalance> save(SellerEmailPhonePasswordTPI sellerEmailPhonePasswordTPI){
+    public ResponseEntity<SellerCompanyNameEmailPhoneTPIBalance> save(@RequestBody SellerEmailPhonePasswordTPI sellerEmailPhonePasswordTPI){
+        System.out.println(sellerEmailPhonePasswordTPI);
         return ResponseEntity.ok(sellerService.save(sellerEmailPhonePasswordTPI));
     }
 }
