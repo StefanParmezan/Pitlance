@@ -40,4 +40,8 @@ public class SellerService {
         return sellerRepository.save(seller);
     }
 
+    public Seller getSellerByTPI(String taxPayerId){
+        return sellerRepository.getSellerByTaxPayerId(taxPayerId).orElseThrow();
+    }
+
 }

@@ -48,9 +48,10 @@ public class Item {
 
     }
 
-    public Item(String itemName, int price){
+    public Item(String itemName, int price, Seller seller){
         this.itemName = itemName;
         this.price = price;
+        this.seller = seller;
     }
 
 

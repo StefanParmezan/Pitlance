@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface SellerRepository extends JpaRepository<Seller, Long> {
     public Optional<Seller> getSellerBySellerName(String sellerName);
-
+    public Optional<Seller> getSellerByTaxPayerId(String taxPayerId);
 }
