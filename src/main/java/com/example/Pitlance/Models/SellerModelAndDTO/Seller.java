@@ -3,6 +3,7 @@ package com.example.Pitlance.Models.SellerModelAndDTO;
 import com.example.Pitlance.Models.OrderModelAndDTO.Item;
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class Seller {
     private String email;
 
     @Column(name = "phone_number")
-    private Integer phoneNumber;
+    private int phoneNumber;
 
     @OneToMany(mappedBy = "seller")
     private final List<Item> items = new ArrayList<>();
@@ -37,7 +38,7 @@ public class Seller {
     private String taxPayerId;
 
     @Column(name = "balance")
-    private Integer balance = 0;
+    private BigDecimal balance = BigDecimal.ZERO;
 
     @Column(name = "password")
     private String password;
@@ -46,7 +47,7 @@ public class Seller {
     }
 
     //Constructors
-    public Seller(String companyName, String sellerName, String sellerLastName, String email, Integer phoneNumber, String taxPayerId, Integer balance, String password){
+    public Seller(String companyName, String sellerName, String sellerLastName, String email, Integer phoneNumber, String taxPayerId, BigDecimal balance, String password){
         this.companyName = companyName;
         this.sellerName = sellerName;
         this.sellerLastName = sellerLastName;
@@ -86,11 +87,11 @@ public class Seller {
         this.companyName = companyName;
     }
 
-    public Integer getBalance() {
+    public BigDecimal getBalance() {
         return balance;
     }
 
-    public void setBalance(Integer balance) {
+    public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
 
@@ -102,11 +103,11 @@ public class Seller {
         this.email = email;
     }
 
-    public Integer getPhoneNumber() {
+    public int getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(Integer phoneNumber) {
+    public void setPhoneNumber(int phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 

@@ -3,6 +3,7 @@ package com.example.Pitlance.Models.ClientModelAndDTO;
 import com.example.Pitlance.Models.OrderModelAndDTO.Item;
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,10 +29,10 @@ public class Client {
     private final List<Item> cart = new ArrayList<>();
 
     @Column(name="balance")
-    private Integer balance = 0;
+    private BigDecimal balance = BigDecimal.ZERO;
 
     @Column(name="phone_number")
-    private Integer phoneNumber;
+    private int phoneNumber;
 
     //Constructors
     public Client(){}
@@ -81,24 +82,20 @@ public class Client {
         return cart;
     }
 
-    public Integer getBalance() {
+    public BigDecimal getBalance() {
         return balance;
     }
 
-    public void setBalance(int balance) {
+    public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
 
-    public Integer getPhoneNumber() {
+    public int getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(Integer phoneNumber) {
+    public void setPhoneNumber(int phoneNumber) {
         this.phoneNumber = phoneNumber;
-    }
-
-    public void setBalance(Integer balance) {
-        this.balance = balance;
     }
 
     //Other methods

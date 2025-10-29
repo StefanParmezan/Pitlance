@@ -1,7 +1,6 @@
 package com.example.Pitlance.Controllers;
 
 import com.example.Pitlance.Models.OrderModelAndDTO.ItemIdNamePrice;
-import com.example.Pitlance.Models.OrderModelAndDTO.ItemNamePrice;
 import com.example.Pitlance.Services.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +21,6 @@ public class ItemController {
     }
 
     @PostMapping
-    public ResponseEntity<ItemIdNamePrice> save(@RequestBody ItemNamePrice itemNamePrice){
-        System.out.println(itemNamePrice.itemName() + " " + itemNamePrice.price());
-        return ResponseEntity.ok(itemService.save(itemNamePrice));
+    public ResponseEntity<ItemIdNamePrice> save(@RequestBody ){
     }
 }

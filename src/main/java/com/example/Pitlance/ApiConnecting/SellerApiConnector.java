@@ -6,6 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -41,7 +42,7 @@ public class SellerApiConnector {
                 sellerEmailPhonePasswordTPI.email(),
                 sellerEmailPhonePasswordTPI.phone(),
                 sellerEmailPhonePasswordTPI.taxPayerId(),
-                0,
+                BigDecimal.ZERO,
                 sellerEmailPhonePasswordTPI.password()
         );
 
