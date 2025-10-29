@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SellerApiConnector {
@@ -24,22 +25,58 @@ public class SellerApiConnector {
             throw new RuntimeException("No IP suggestions found for INN: " + taxPayerId);
         }
 
+        System.out.println(response);
         Suggestion firstSuggestion = response.suggestions().get(0);
+        Data data = firstSuggestion.data();
+        Fio fio = data.fio();
+        System.out.println("companyName: " + firstSuggestion.value + "\nname: " + fio.name + "\nlastname: " + fio.surname);
+
+
 
         return new DaDataResponse(
                 firstSuggestion.value,
-                firstSuggestion.data.fio.name,
-                firstSuggestion.data.fio.lastName
+                fio.name.orElseThrow(),
+                fio.surname.orElseThrow()
         );
     }
 
-    public record DaDataApiResponse(List<Suggestion> suggestions) {}
+    public record DaDataApiResponse(List<Suggestion> suggestions) {
+        @Override
+        public String toString() {
+            return "DaDataApiResponse{" +
+                    "suggestions=" + suggestions +
+                    '}';
+        }
+    }
 
-    public record Suggestion(String value, Data data) {}
+    public record Suggestion(String value, Data data) {
+        @Override
+        public String toString() {
+            return "Suggestion{" +
+                    "value='" + value + '\'' +
+                    ", data=" + data +
+                    '}';
+        }
+    }
 
-    public record Data(Fio fio) {}
+    public record Data(Fio fio) {
+        @Override
+        public String toString() {
+            return "Data{" +
+                    "fio=" + fio +
+                    '}';
+        }
+    }
 
-    public record Fio(String lastName, String name) {}
+    public record Fio(Optional<String> surname, Optional<String> name) {
+        @Override
+        public String toString() {
+            return "Fio{" +
+                    "surname='" + surname + '\'' +
+                    ", name='" + name + '\'' +
+                    '}';
+        }
+    }
 
     public record DaDataRequest(String query, int count, String type){}
 
