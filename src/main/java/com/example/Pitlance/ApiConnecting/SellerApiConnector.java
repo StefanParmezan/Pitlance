@@ -16,7 +16,6 @@ public class SellerApiConnector {
 
         DaDataApiResponse response = restClient.post()
                 .header("Authorization", "Token df9c9b7b020887e03d8aa2c1e1ab5fcbd2608b53")
-                .contentType(MediaType.APPLICATION_JSON)
                 .body(new DaDataRequest(taxPayerId, 1, "INDIVIDUAL"))
                 .retrieve()
                 .body(DaDataApiResponse.class);
