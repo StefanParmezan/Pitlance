@@ -1,6 +1,7 @@
 package com.example.Pitlance.Models.SellerModelAndDTO;
 
-public record SellerEmailPhonePasswordTPI(String email, Long phone, String password, String taxPayerId) {
+public record
+SellerEmailPhonePasswordTPI(String email, Long phoneNumber, String password, String taxPayerId) {
     public static SellerEmailPhonePasswordTPI of(Seller seller){
         return new SellerEmailPhonePasswordTPI(seller.getEmail(), seller.getPhoneNumber(), seller.getPassword(), seller.getTaxPayerId());
     }
@@ -9,7 +10,7 @@ public record SellerEmailPhonePasswordTPI(String email, Long phone, String passw
     public String toString() {
         return "SellerEmailPhonePasswordTPI{" +
                 "email='" + email + '\'' +
-                ", phone=" + phone +
+                ", phoneNumber=" + phoneNumber +
                 ", password='" + password + '\'' +
                 ", taxPayerId='" + taxPayerId + '\'' +
                 '}';

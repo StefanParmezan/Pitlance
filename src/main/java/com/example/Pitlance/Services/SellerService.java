@@ -5,10 +5,13 @@ import com.example.Pitlance.Models.SellerModelAndDTO.Seller;
 import com.example.Pitlance.Models.SellerModelAndDTO.SellerCompanyNameEmailPhoneTPIBalance;
 import com.example.Pitlance.Models.SellerModelAndDTO.SellerEmailPhonePasswordTPI;
 import com.example.Pitlance.Models.SellerModelAndDTO.SellerNameEmailBalancePhonePasswordTPI;
+import com.example.Pitlance.Models.ValidResponse.DaDataResponse;
 import com.example.Pitlance.Repositories.SellerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
 
 @Service
 public class SellerService {
@@ -26,16 +29,16 @@ public class SellerService {
     }
 
     public SellerCompanyNameEmailPhoneTPIBalance save(SellerEmailPhonePasswordTPI sellerEmailPhonePasswordTPI){
-        SellerNameEmailBalancePhonePasswordTPI sellerNameEmailBalancePhonePasswordTPI = sellerApiConnector.validateSellerByTPI(sellerEmailPhonePasswordTPI);
+        DaDataResponse daDataResponse = sellerApiConnector.validateSellerByTPI(sellerEmailPhonePasswordTPI.taxPayerId());
         Seller seller = new Seller(
-                sellerNameEmailBalancePhonePasswordTPI.companyName(),
-                sellerNameEmailBalancePhonePasswordTPI.sellerName(),
-                sellerNameEmailBalancePhonePasswordTPI.sellerLastName(),
-                sellerNameEmailBalancePhonePasswordTPI.email(),
-                sellerNameEmailBalancePhonePasswordTPI.phoneNumber(),
-                sellerNameEmailBalancePhonePasswordTPI.taxPayerId(),
-                sellerNameEmailBalancePhonePasswordTPI.balance(),
-                sellerNameEmailBalancePhonePasswordTPI.password()
+                daDataResponse.companyName(),
+                daDataResponse.sellerName(),
+                daDataResponse.sellerLastName(),
+                sellerEmailPhonePasswordTPI.email(),
+                sellerEmailPhonePasswordTPI.phoneNumber(),
+                sellerEmailPhonePasswordTPI.taxPayerId(),
+                BigDecimal.ZERO,
+                sellerEmailPhonePasswordTPI.password()
                 );
         seller.setPassword(passwordEncoder.encode(seller.getPassword()));
         return SellerCompanyNameEmailPhoneTPIBalance.of(sellerRepository.save(seller));
