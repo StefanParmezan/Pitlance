@@ -1,7 +1,7 @@
 package com.example.Pitlance.ApiConnecting;
 
 import com.example.Pitlance.Models.ValidResponse.DaDataResponse;
-import org.springframework.http.MediaType;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
@@ -12,10 +12,16 @@ import java.util.Optional;
 public class SellerApiConnector {
     private final RestClient restClient = RestClient.create("https://suggestions.dadata.ru/suggestions/api/4_1/rs/findById/party");
 
+    public SellerApiConnector(@Value("${dadata.api.secretkey}") String daDataSecretKey){
+        this.daDataSecreyKey = daDataSecretKey;
+    }
+
+    private final String daDataSecreyKey;
+
     public DaDataResponse validateSellerByTPI(String taxPayerId) {
 
         DaDataApiResponse response = restClient.post()
-                .header("Authorization", "Token df9c9b7b020887e03d8aa2c1e1ab5fcbd2608b53")
+                .header("Authorization", "Token " + daDataSecreyKey)
                 .body(new DaDataRequest(taxPayerId, 1, "INDIVIDUAL"))
                 .retrieve()
                 .body(DaDataApiResponse.class);
