@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ItemService {
-
+    //Variables
     private final ItemRepository itemRepository;
 
     private final SellerService sellerService;
